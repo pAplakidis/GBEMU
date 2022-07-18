@@ -1,0 +1,4 @@
+* read ROM
+* correct identation (optional)
+* opcodes
+* memory map
