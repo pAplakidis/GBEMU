@@ -6,4 +6,3 @@
 #include <vector>
 
 void hexdump(void *ptr, int buflen);
-void hexdump_vector(std::vector<uint8_t> data);
