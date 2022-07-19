@@ -19,5 +19,6 @@ private:
 public:
   Gameboy(std::string rom_path);
   ~Gameboy();
+  void run();
   auto read_rom(std::string rom_path) -> std::vector<uint8_t>;
 };

@@ -13,6 +13,7 @@ int main(int argc, char **argv){
   std::string rom_path = argv[1];
 
   Gameboy *gb = new Gameboy(rom_path);
+  gb->run();
 
   return 0;
 }

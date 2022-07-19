@@ -2,15 +2,28 @@
 
 Gameboy::Gameboy(std::string rom_path){
     auto rom_data = read_rom(rom_path);
-    std::string *p_rom_data = std::string(rom_data.begin(), rom_data.end());
-    hexdump((void*)(p_rom_data), p_rom_data->length());
 
+    // print ROM contents
+    int cnt = 0;
+    for(uint8_t i: rom_data){
+        printf("0x%04x: 0x%02x\t", cnt, i);
+        if(cnt % 4 == 0)
+            printf("\n");
+        cnt++;
+    }
+    printf("\nROM data size: %d bytes\n", rom_data.size());
+
+    // init components
     ctrg = new Cartridge(rom_data);
     cpu = new CPU();
 }
 
 Gameboy::~Gameboy(){
 
+}
+
+void Gameboy::run(){
+    cpu->main_loop();
 }
 
 auto Gameboy::read_rom(std::string rom_path) -> std::vector<uint8_t> {

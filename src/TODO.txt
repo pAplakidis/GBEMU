@@ -1,4 +1,5 @@
-* read ROM
+* read ROM  (DONE)
 * correct identation (optional)
+* cartridge class
 * opcodes
 * memory map
