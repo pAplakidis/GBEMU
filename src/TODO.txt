@@ -3,3 +3,11 @@
 * cartridge class
 * opcodes
 * memory map
+
+Components:
+- Sharp SM83 CPU
+- Picture Processing Unit
+- 256B ROM
+- Audio Processing Unit
+- 8KB RAM
+- 8KB VRAM

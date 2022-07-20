@@ -10,6 +10,8 @@ CPU::CPU(uint8_t *memory_ptr, int m_size){
     reg_pc = 0x00;
     reg_sp = 0x00;
 
+    flag = 0x00;
+
     this->memory_ptr = memory_ptr;
 }
 
@@ -20,35 +22,47 @@ CPU::~CPU(){
 void CPU::main_loop(){
     while(1){
         cycle();
+
+        //break;  // TODO: temporary for debugging
     }
 }
 
 void CPU::cycle(){
-    printf("0x04:\t", reg_pc);
+    printf("0x%04x:\t", reg_pc);
+    uint8_t instr = load(reg_pc);
+    printf("0x%02x\n", instr);
+
+    reg_pc++;
 }
 
-uint16_t CPU::mem_load16(uint16_t offset){
+uint8_t CPU::mem_load(uint16_t offset){
     size_t off = (size_t)offset;
-    uint16_t b0 = memory_ptr[off + 0];
-    uint16_t b1 = memory_ptr[off + 1];
-    uint16_t l_endian = b0 | (b1 << 8);
-    return l_endian;
+    if(offset < 8*1024)
+        return memory_ptr[off];
+
+    return 0x00;
 }
 
-uint8_t CPU::mem_load8(uint8_t offset){
+void CPU::mem_store(uint16_t offset, uint8_t data){
     size_t off = (size_t)offset;
-    return memory_ptr[off];
+    if(offset < 8*1024)
+        memory_ptr[off] = data;
+
 }
 
+void CPU::store(uint16_t addr, uint8_t data){
+    // TODO: this is temporary since memory map is not finished
 
-void CPU::load16(uint16_t addr){
-    // TODO: check if addr is aligned
-    if(uint16_t *offset = map::ROM_bank0->contains(addr)){
-
-    }
 }
 
-void CPU::load8(uint8_t addr){
+uint8_t CPU::load(uint16_t addr){
+
     // TODO: check if addr is aligned
 
+    // TODO: we are currently using just one big junk of memory, but later it needs to utilize the memory map
+    //if(uint16_t *offset = map::ROM_bank0->contains(addr)){
+    //
+    //}
+
+    return mem_load(addr);
 }

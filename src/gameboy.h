@@ -10,7 +10,8 @@
 
 class Gameboy{
 private:
-  static const size_t MEM_SIZE = 8 * 1024;
+  //static const size_t MEM_SIZE = 8 * 1024;
+  static const size_t MEM_SIZE = 1024 * 1024; // TODO: using temporarily 1MB of RAM
   unsigned char memory[MEM_SIZE]; // work RAM (WRAM)
 
   Cartridge *ctrg;

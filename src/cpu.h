@@ -30,18 +30,19 @@ private:
     Regcomb *de;
     Regcomb *hl;
 
+    uint8_t flag;
+
     uint8_t *memory_ptr;
 
 public:
     CPU(uint8_t *memory_ptr, int m_size);
     ~CPU();
 
-    uint16_t mem_load16(uint16_t offset);
-    uint8_t mem_load8(uint8_t offset);
-
+    uint8_t mem_load(uint16_t offset);
+    void mem_store(uint16_t offset, uint8_t data);
 
     void main_loop();
     void cycle();
-    void load16(uint16_t addr);
-    void load8(uint8_t addr);
+    void store(uint16_t addr, uint8_t data);
+    uint8_t load(uint16_t addr);
 };

@@ -3,13 +3,15 @@
 Gameboy::Gameboy(std::string rom_path){
     auto rom_data = read_rom(rom_path);
 
-    // print ROM contents
-    int cnt = 0;
+    // print ROM contents and copy them to main memory
+    int idx = 0;
     for(uint8_t i: rom_data){
-        printf("0x%04x: 0x%02x\t", cnt, i);
-        if(cnt % 4 == 0)
+        printf("0x%04x: 0x%02x\t", idx, i);
+        if(idx % 4 == 0)
             printf("\n");
-        cnt++;
+        idx++;
+
+        memory[idx] = i;
     }
     printf("\nROM data size: %d bytes\n", rom_data.size());
 
