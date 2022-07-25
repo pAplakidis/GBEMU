@@ -43,6 +43,11 @@ public:
 
     void main_loop();
     void cycle();
+    void execute(uint8_t instr);
     void store(uint16_t addr, uint8_t data);
     uint8_t load(uint16_t addr);
+
+    // all instructions
+    void op_nop();
+    void op_ld();
 };

@@ -27,12 +27,23 @@ void CPU::main_loop(){
     }
 }
 
+// TODO: some commands have variable number of cycles (handle timing)
 void CPU::cycle(){
     printf("0x%04x:\t", reg_pc);
     uint8_t instr = load(reg_pc);
     printf("0x%02x\n", instr);
 
+    execute(instr);
+
     reg_pc++;
+}
+
+void CPU::execute(uint8_t instr){
+    switch(instr){
+        case 0x00:
+            op_nop();
+            break;
+    }
 }
 
 uint8_t CPU::mem_load(uint16_t offset){
@@ -65,4 +76,13 @@ uint8_t CPU::load(uint16_t addr){
     //}
 
     return mem_load(addr);
+}
+
+// All instructions
+void CPU::op_nop(){
+    // do nothing
+}
+
+void CPU::op_ld(){
+
 }
