@@ -29,19 +29,42 @@ void CPU::main_loop(){
 
 // TODO: some commands have variable number of cycles (handle timing)
 void CPU::cycle(){
+    debug_instr = "";
+
     printf("0x%04x:\t", reg_pc);
     uint8_t instr = load(reg_pc);
-    printf("0x%02x\n", instr);
+    printf("0x%02x\t", instr);
 
     execute(instr);
+    std::cout << debug_instr << std::endl;
 
     reg_pc++;
+    // TODO: remove when done debugging
+    //if(reg_pc == 2){
+    //if(reg_pc > 0x0110){
+    //    exit(0);
+    //}
 }
 
 void CPU::execute(uint8_t instr){
     switch(instr){
         case 0x00:
-            op_nop();
+            op_00();
+            break;
+        case 0x80:
+            op_80();
+            break;
+        case 0x81:
+            op_81();
+            break;
+        case 0x82:
+            op_82();
+            break;
+        case 0x83:
+            op_83();
+            break;
+        default:
+            printf("Opcode not supported\n");
             break;
     }
 }
@@ -78,11 +101,46 @@ uint8_t CPU::load(uint16_t addr){
     return mem_load(addr);
 }
 
+// All opcodes
+void CPU::op_00(){
+    op_nop();
+}
+
+void CPU::op_01(){
+    op_ld();
+}
+
+void CPU::op_80(){
+    op_add(&a, &b);
+    debug_instr.append("A, B");
+}
+
+void CPU::op_81(){
+    op_add(&a, &c);
+    debug_instr.append("A, C");
+}
+
+void CPU::op_82(){
+    op_add(&a, &d);
+    debug_instr.append("A, D");
+}
+
+void CPU::op_83(){
+    op_add(&a, &e);
+    debug_instr.append("A, E");
+}
+
 // All instructions
 void CPU::op_nop(){
     // do nothing
+    debug_instr = "NOP ";
 }
 
 void CPU::op_ld(){
+    debug_instr = "LD ";
+}
 
+void CPU::op_add(uint8_t *reg, uint8_t *val){
+    debug_instr = "ADD ";
+    *reg = *reg + *val;
 }
