@@ -14,6 +14,7 @@ class CPU{
 private:
     // for debugging
     std::string debug_instr = "";
+    bool brk = false;
 
     // registers (real)
     uint8_t a;
@@ -101,6 +102,22 @@ public:
     void op_8D();
     void op_8E();
     void op_8F();
+    void op_90();
+    void op_91();
+    void op_92();
+    void op_93();
+    void op_94();
+    void op_95();
+    void op_96();
+    void op_97();
+    void op_98();
+    void op_99();
+    void op_9A();
+    void op_9B();
+    void op_9C();
+    void op_9D();
+    void op_9E();
+    void op_9F();
     // TODO: add more opcodes
     void op_F0();
     void op_F1();
@@ -123,4 +140,7 @@ public:
     void op_nop();
     void op_ld();
     void op_add(uint8_t *reg, uint8_t *val);
+    void op_adc(uint8_t *val);
+    void op_sub(uint8_t *reg, uint8_t *val);
+    void op_sbc(uint8_t *val);
 };

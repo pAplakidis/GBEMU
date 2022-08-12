@@ -44,6 +44,10 @@ void CPU::cycle(){
     //if(reg_pc > 0x0110){
     //    exit(0);
     //}
+    if(brk == true){
+        // TODO: print registers and stack values
+        exit(0);
+    }
 }
 
 void CPU::execute(uint8_t instr){
@@ -62,6 +66,90 @@ void CPU::execute(uint8_t instr){
             break;
         case 0x83:
             op_83();
+            break;
+        case 0x84:
+            op_84();
+            break;
+        case 0x85:
+            op_85();
+            break;
+        case 0x86:
+            op_86();
+            break;
+        case 0x87:
+            op_87();
+            break;
+        case 0x88:
+            op_88();
+            break;
+        case 0x89:
+            op_89();
+            break;
+        case 0x8A:
+            op_8A();
+            break;
+        case 0x8B:
+            op_8B();
+            break;
+        case 0x8C:
+            op_8C();
+            break;
+        case 0x8D:
+            op_8D();
+            break;
+        case 0x8E:
+            op_8E();
+            break;
+        case 0x8F:
+            op_8F();
+            break;
+        case 0x90:
+            op_90();
+            break;
+        case 0x91:
+            op_91();
+            break;
+        case 0x92:
+            op_92();
+            break;
+        case 0x93:
+            op_93();
+            break;
+        case 0x94:
+            op_94();
+            break;
+        case 0x95:
+            op_95();
+            break;
+        case 0x96:
+            op_96();
+            break;
+        case 0x97:
+            op_97();
+            break;
+        case 0x98:
+            op_98();
+            break;
+        case 0x99:
+            op_99();
+            break;
+        case 0x9A:
+            op_9A();
+            break;
+        case 0x9B:
+            op_9B();
+            break;
+        case 0x9C:
+            op_9C();
+            break;
+        case 0x9D:
+            op_9D();
+            break;
+        case 0x9E:
+            op_9E();
+            break;
+        case 0x9F:
+            op_9F();
             break;
         default:
             printf("Opcode not supported\n");
@@ -130,6 +218,150 @@ void CPU::op_83(){
     debug_instr.append("A, E");
 }
 
+void CPU::op_84(){
+    op_add(&a, &h);
+    debug_instr.append("A, H");
+}
+
+void CPU::op_85(){
+    op_add(&a, &l);
+    debug_instr.append("A, L");
+}
+
+void CPU::op_86(){
+    // TODO
+    op_add(&a, &e);
+    debug_instr.append("A, (HL)");
+}
+
+void CPU::op_87(){
+    op_add(&a, &a);
+    debug_instr.append("A, A");
+}
+
+void CPU::op_88(){
+    op_adc(&b);
+    debug_instr.append("A, B");
+}
+
+void CPU::op_89(){
+    op_adc(&c);
+    debug_instr.append("A, C");
+}
+
+void CPU::op_8A(){
+    op_adc(&d);
+    debug_instr.append("A, D");
+}
+
+void CPU::op_8B(){
+    op_adc(&e);
+    debug_instr.append("A, E");
+}
+
+void CPU::op_8C(){
+    op_adc(&h);
+    debug_instr.append("A, H");
+}
+
+void CPU::op_8D(){
+    op_adc(&l);
+    debug_instr.append("A, L");
+}
+
+void CPU::op_8E(){
+    // TODO
+    op_adc(&e);
+    debug_instr.append("A, (HL)");
+}
+
+void CPU::op_8F(){
+    op_adc(&a);
+    debug_instr.append("A, A");
+}
+
+void CPU::op_90(){
+    op_sub(&a, &b);
+    debug_instr.append("A, B");
+}
+
+void CPU::op_91(){
+    op_sub(&a, &c);
+    debug_instr.append("A, C");
+}
+
+void CPU::op_92(){
+    op_sub(&a, &d);
+    debug_instr.append("A, D");
+}
+
+void CPU::op_93(){
+    op_sub(&a, &e);
+    debug_instr.append("A, E");
+}
+
+void CPU::op_94(){
+    op_sub(&a, &h);
+    debug_instr.append("A, H");
+}
+
+void CPU::op_95(){
+    op_sub(&a, &l);
+    debug_instr.append("A, L");
+}
+
+void CPU::op_96(){
+    // TODO
+    op_sub(&a, &e);
+    debug_instr.append("A, (HL)");
+}
+
+void CPU::op_97(){
+    op_sub(&a, &a);
+    debug_instr.append("A, A");
+}
+
+void CPU::op_98(){
+    op_sbc(&b);
+    debug_instr.append("A, B");
+}
+
+void CPU::op_99(){
+    op_sbc(&c);
+    debug_instr.append("A, C");
+}
+
+void CPU::op_9A(){
+    op_sbc(&d);
+    debug_instr.append("A, D");
+}
+
+void CPU::op_9B(){
+    op_sbc(&e);
+    debug_instr.append("A, E");
+}
+
+void CPU::op_9C(){
+    op_sbc(&h);
+    debug_instr.append("A, H");
+}
+
+void CPU::op_9D(){
+    op_sbc(&l);
+    debug_instr.append("A, L");
+}
+
+void CPU::op_9E(){
+    // TODO
+    op_sbc(&e);
+    debug_instr.append("A, (HL)");
+}
+
+void CPU::op_9F(){
+    op_sbc(&a);
+    debug_instr.append("A, A");
+}
+
 // All instructions
 void CPU::op_nop(){
     // do nothing
@@ -143,4 +375,25 @@ void CPU::op_ld(){
 void CPU::op_add(uint8_t *reg, uint8_t *val){
     debug_instr = "ADD ";
     *reg = *reg + *val;
+
+    // TODO: set flags such as carry, etc
+}
+
+void CPU::op_adc(uint8_t *val){
+    debug_instr = "ADC ";
+    uint8_t carry = f;
+    a = a + *val + carry;
+
+    // TODO: set flags such as carry, etc
+}
+
+void CPU::op_sub(uint8_t *reg, uint8_t *val){
+    debug_instr = "SUB ";
+    *reg = *reg - *val;
+}
+
+void CPU::op_sbc(uint8_t *val){
+    debug_instr = "SBC ";
+    uint8_t carry = f;
+    a = a - *val - carry;
 }
