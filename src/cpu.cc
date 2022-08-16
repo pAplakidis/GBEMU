@@ -33,17 +33,20 @@ void CPU::cycle(){
 
     printf("0x%04x:\t", reg_pc);
     uint8_t instr = load(reg_pc);
-    printf("0x%02x\t", instr);
+    printf("0x%02x =>\t", instr);
 
     execute(instr);
     std::cout << debug_instr << std::endl;
 
     reg_pc++;
-    // TODO: remove when done debugging
-    //if(reg_pc == 2){
-    //if(reg_pc > 0x0110){
-    //    exit(0);
-    //}
+    
+    // max PC value
+    if(reg_pc >= 0xffff){
+        exit(0);
+    }
+
+    // TODO: move to a debugger class
+    // for debugging
     if(brk == true){
         // TODO: print registers and stack values
         exit(0);
@@ -150,6 +153,102 @@ void CPU::execute(uint8_t instr){
             break;
         case 0x9F:
             op_9F();
+            break;
+        case 0xA0:
+            op_A0();
+            break;
+        case 0xA1:
+            op_A1();
+            break;
+        case 0xA2:
+            op_A2();
+            break;
+        case 0xA3:
+            op_A3();
+            break;
+        case 0xA4:
+            op_A4();
+            break;
+        case 0xA5:
+            op_A5();
+            break;
+        case 0xA6:
+            op_A6();
+            break;
+        case 0xA7:
+            op_A7();
+            break;
+        case 0xA8:
+            op_A8();
+            break;
+        case 0xA9:
+            op_A9();
+            break;
+        case 0xAA:
+            op_AA();
+            break;
+        case 0xAB:
+            op_AB();
+            break;
+        case 0xAC:
+            op_AC();
+            break;
+        case 0xAD:
+            op_AD();
+            break;
+        case 0xAE:
+            op_AE();
+            break;
+        case 0xAF:
+            op_AF();
+            break;
+        case 0xB0:
+            op_B0();
+            break;
+        case 0xB1:
+            op_B1();
+            break;
+        case 0xB2:
+            op_B2();
+            break;
+        case 0xB3:
+            op_B3();
+            break;
+        case 0xB4:
+            op_B4();
+            break;
+        case 0xB5:
+            op_B5();
+            break;
+        case 0xB6:
+            op_B6();
+            break;
+        case 0xB7:
+            op_B7();
+            break;
+        case 0xB8:
+            op_B8();
+            break;
+        case 0xB9:
+            op_B9();
+            break;
+        case 0xBA:
+            op_BA();
+            break;
+        case 0xBB:
+            op_BB();
+            break;
+        case 0xBC:
+            op_BC();
+            break;
+        case 0xBD:
+            op_BD();
+            break;
+        case 0xBE:
+            op_BE();
+            break;
+        case 0xBF:
+            op_BF();
             break;
         default:
             printf("Opcode not supported\n");
@@ -362,6 +461,167 @@ void CPU::op_9F(){
     debug_instr.append("A, A");
 }
 
+void CPU::op_A0(){
+    op_and(&b);
+    debug_instr.append("A, B");
+}
+
+void CPU::op_A1(){
+    op_and(&c);
+    debug_instr.append("A, C");
+}
+
+void CPU::op_A2(){
+    op_and(&d);
+    debug_instr.append("A, D");
+}
+
+void CPU::op_A3(){
+    op_and(&e);
+    debug_instr.append("A, E");
+}
+
+void CPU::op_A4(){
+    op_and(&h);
+    debug_instr.append("A, H");
+}
+
+void CPU::op_A5(){
+    op_and(&l);
+    debug_instr.append("A, L");
+}
+
+void CPU::op_A6(){
+    // TODO
+    op_and(&e);
+    debug_instr.append("A, (HL)");
+}
+
+void CPU::op_A7(){
+    op_and(&a);
+    debug_instr.append("A, A");
+}
+
+void CPU::op_A8(){
+    op_xor(&b);
+    debug_instr.append("A, B");
+}
+
+void CPU::op_A9(){
+    op_xor(&c);
+    debug_instr.append("A, C");
+}
+
+void CPU::op_AA(){
+    op_xor(&d);
+    debug_instr.append("A, D");
+}
+
+void CPU::op_AB(){
+    op_xor(&e);
+    debug_instr.append("A, E");
+}
+
+void CPU::op_AC(){
+    op_xor(&h);
+    debug_instr.append("A, H");
+}
+
+void CPU::op_AD(){
+    op_xor(&l);
+    debug_instr.append("A, L");
+}
+
+void CPU::op_AE(){
+    op_xor(&e);
+    debug_instr.append("A, (HL)");
+}
+
+void CPU::op_AF(){
+    op_xor(&a);
+    debug_instr.append("A, A");
+}
+
+void CPU::op_B0(){
+    op_or(&b);
+    debug_instr.append("A, B");
+}
+
+void CPU::op_B1(){
+    op_or(&c);
+    debug_instr.append("A, C");
+}
+
+void CPU::op_B2(){
+    op_or(&d);
+    debug_instr.append("A, D");
+}
+
+void CPU::op_B3(){
+    op_or(&e);
+    debug_instr.append("A, E");
+}
+
+void CPU::op_B4(){
+    op_or(&h);
+    debug_instr.append("A, H");
+}
+
+void CPU::op_B5(){
+    op_or(&l);
+    debug_instr.append("A, L");
+}
+
+void CPU::op_B6(){
+    op_or(&e);
+    debug_instr.append("A, (HL)");
+}
+
+void CPU::op_B7(){
+    op_or(&l);
+    debug_instr.append("A, A");
+}
+
+void CPU::op_B8(){
+    op_cp(&b);
+    debug_instr.append("A, B");
+}
+
+void CPU::op_B9(){
+    op_cp(&c);
+    debug_instr.append("A, C");
+}
+
+void CPU::op_BA(){
+    op_cp(&d);
+    debug_instr.append("A, D");
+}
+
+void CPU::op_BB(){
+    op_cp(&e);
+    debug_instr.append("A, E");
+}
+
+void CPU::op_BC(){
+    op_cp(&h);
+    debug_instr.append("A, H");
+}
+
+void CPU::op_BD(){
+    op_cp(&l);
+    debug_instr.append("A, L");
+}
+
+void CPU::op_BE(){
+    op_cp(&e);
+    debug_instr.append("A, (HL)");
+}
+
+void CPU::op_BF(){
+    op_cp(&a);
+    debug_instr.append("A, A");
+}
+
 // All instructions
 void CPU::op_nop(){
     // do nothing
@@ -382,7 +642,7 @@ void CPU::op_add(uint8_t *reg, uint8_t *val){
 void CPU::op_adc(uint8_t *val){
     debug_instr = "ADC ";
     uint8_t carry = f;
-    a = a + *val + carry;
+    a += *val + carry;
 
     // TODO: set flags such as carry, etc
 }
@@ -395,5 +655,29 @@ void CPU::op_sub(uint8_t *reg, uint8_t *val){
 void CPU::op_sbc(uint8_t *val){
     debug_instr = "SBC ";
     uint8_t carry = f;
-    a = a - *val - carry;
+    a -= *val - carry;
+}
+
+void CPU::op_and(uint8_t *val){
+    debug_instr = "AND ";
+    a &= *val;
+}
+
+void CPU::op_xor(uint8_t *val){
+    debug_instr = "XOR ";
+    a ^= *val;
+}
+
+void CPU::op_or(uint8_t *val){
+    debug_instr = "OR ";
+    a |= *val;
+}
+
+// TODO: CP is a subtraction from A that doesn't update A, only the flags it would have set/reset if it really was subtracted.
+void CPU::op_cp(uint8_t *val){
+    debug_instr = "CP ";
+    uint8_t res = a - *val;
+    brk = true;
+
+    // TODO: update flags
 }
