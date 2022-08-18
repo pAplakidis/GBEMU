@@ -250,6 +250,54 @@ void CPU::execute(uint8_t instr){
         case 0xBF:
             op_BF();
             break;
+        case 0xC0:
+            op_C0();
+            break;
+        case 0xC1:
+            op_C1();
+            break;
+        case 0xC2:
+            op_C2();
+            break;
+        case 0xC3:
+            op_C3();
+            break;
+        case 0xC4:
+            op_C4();
+            break;
+        case 0xC5:
+            op_C5();
+            break;
+        case 0xC6:
+            op_C6();
+            break;
+        case 0xC7:
+            op_C7();
+            break;
+        case 0xC8:
+            op_C8();
+            break;
+        case 0xC9:
+            op_C9();
+            break;
+        case 0xCA:
+            op_CA();
+            break;
+        case 0xCB:
+            op_CB();
+            break;
+        case 0xCC:
+            op_CC();
+            break;
+        case 0xCD:
+            op_CD();
+            break;
+        case 0xCE:
+            op_CE();
+            break;
+        case 0xCF:
+            op_CF();
+            break;
         default:
             printf("Opcode not supported\n");
             break;
@@ -622,6 +670,78 @@ void CPU::op_BF(){
     debug_instr.append("A, A");
 }
 
+void CPU::op_C0(){
+
+}
+
+void CPU::op_C1(){
+
+}
+
+void CPU::op_C2(){
+    // TODO: pass address
+    //op_jp();
+    debug_instr.append("NZ, addr");
+}
+
+void CPU::op_C3(){
+    // TODO: pass address
+    //op_jp();
+    debug_instr.append("addr");
+}
+
+void CPU::op_C4(){
+
+}
+
+void CPU::op_C5(){
+
+}
+
+void CPU::op_C6(){
+
+}
+
+void CPU::op_C7(){
+
+}
+
+void CPU::op_C8(){
+
+}
+
+void CPU::op_C9(){
+
+}
+
+void CPU::op_CA(){
+    // TODO: add address
+    //op_jp();
+    debug_instr.append("Z, addr");
+
+}
+
+void CPU::op_CB(){
+
+}
+
+void CPU::op_CC(){
+
+}
+
+void CPU::op_CD(){
+
+}
+
+void CPU::op_CE(){
+
+}
+
+void CPU::op_CF(){
+
+}
+
+
 // All instructions
 void CPU::op_nop(){
     // do nothing
@@ -677,7 +797,20 @@ void CPU::op_or(uint8_t *val){
 void CPU::op_cp(uint8_t *val){
     debug_instr = "CP ";
     uint8_t res = a - *val;
-    brk = true;
 
     // TODO: update flags
+}
+
+void CPU::op_jp(uint8_t addr){
+    debug_instr = "JP ";
+    reg_pc = addr;
+    brk = true;
+
+    // TODO: handle flags and conditions
+}
+
+void CPU::op_jr(){
+    debug_instr = "JR ";
+    // TODO
+
 }

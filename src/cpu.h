@@ -150,6 +150,22 @@ public:
     void op_BD();
     void op_BE();
     void op_BF();
+    void op_C0();
+    void op_C1();
+    void op_C2();
+    void op_C3();
+    void op_C4();
+    void op_C5();
+    void op_C6();
+    void op_C7();
+    void op_C8();
+    void op_C9();
+    void op_CA();
+    void op_CB();
+    void op_CC();
+    void op_CD();
+    void op_CE();
+    void op_CF();
     // TODO: add more opcodes
     void op_F0();
     void op_F1();
@@ -179,4 +195,6 @@ public:
     void op_xor(uint8_t *val);
     void op_or(uint8_t *val);
     void op_cp(uint8_t *val);
+    void op_jp(uint8_t addr);
+    void op_jr();
 };
