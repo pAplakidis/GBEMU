@@ -188,6 +188,8 @@ public:
     void op_nop();
     void op_ld();
     void op_add(uint8_t *reg, uint8_t *val);
+    void op_inc(uint8_t *reg);
+    void op_inc(Regcomb *reg);
     void op_adc(uint8_t *val);
     void op_sub(uint8_t *reg, uint8_t *val);
     void op_sbc(uint8_t *val);

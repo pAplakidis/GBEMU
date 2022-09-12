@@ -13,6 +13,14 @@ uint8_t Regcomb::get_lo(){
 
 }
 
-void set(){
+void Regcomb::set(uint16_t new_val){
+    val = new_val;
+}
 
+uint16_t Regcomb::get(){
+    return val;
+}
+
+void Regcomb::increment(){
+    set(get() + 1);
 }

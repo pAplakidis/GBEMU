@@ -58,6 +58,51 @@ void CPU::execute(uint8_t instr){
         case 0x00:
             op_00();
             break;
+        case 0x01:
+            op_01();
+            break;
+        case 0x02:
+            op_02();
+            break;
+        case 0x03:
+            op_03();
+            break;
+        case 0x04:
+            op_04();
+            break;
+        case 0x05:
+            op_05();
+            break;
+        case 0x06:
+            op_06();
+            break;
+        case 0x07:
+            op_07();
+            break;
+        case 0x08:
+            op_08();
+            break;
+        case 0x09:
+            op_09();
+            break;
+        case 0x0A:
+            op_0A();
+            break;
+        case 0x0B:
+            op_0B();
+            break;
+        case 0x0C:
+            op_0C();
+            break;
+        case 0x0D:
+            op_0D();
+            break;
+        case 0x0E:
+            op_0E();
+            break;
+        case 0x0F:
+            op_0F();
+            break;
         case 0x80:
             op_80();
             break;
@@ -344,6 +389,129 @@ void CPU::op_00(){
 void CPU::op_01(){
     op_ld();
 }
+
+void CPU::op_02(){
+    op_ld();
+}
+
+void CPU::op_03(){
+    op_inc(bc);
+    debug_instr.append("BC");
+}
+
+void CPU::op_04(){
+    op_inc(&b);
+    debug_instr.append("B");
+}
+
+void CPU::op_05(){
+
+}
+
+void CPU::op_06(){
+
+}
+
+void CPU::op_07(){
+
+}
+
+void CPU::op_08(){
+
+}
+
+void CPU::op_09(){
+
+}
+
+void CPU::op_0A(){
+
+}
+
+void CPU::op_0B(){
+
+}
+
+void CPU::op_0C(){
+
+}
+
+void CPU::op_0D(){
+
+}
+
+void CPU::op_0E(){
+
+}
+
+void CPU::op_0F(){
+
+}
+
+void CPU::op_10(){
+
+}
+
+void CPU::op_11(){
+
+}
+
+void CPU::op_12(){
+
+}
+
+void CPU::op_13(){
+
+}
+
+void CPU::op_14(){
+
+}
+
+void CPU::op_15(){
+
+}
+
+void CPU::op_16(){
+
+}
+
+void CPU::op_17(){
+
+}
+
+void CPU::op_18(){
+
+}
+
+void CPU::op_19(){
+
+}
+
+void CPU::op_1A(){
+
+}
+
+void CPU::op_1B(){
+
+}
+
+void CPU::op_1C(){
+
+}
+
+void CPU::op_1D(){
+
+}
+
+void CPU::op_1E(){
+
+}
+
+void CPU::op_1F(){
+
+}
+
 
 void CPU::op_80(){
     op_add(&a, &b);
@@ -757,6 +925,16 @@ void CPU::op_add(uint8_t *reg, uint8_t *val){
     *reg = *reg + *val;
 
     // TODO: set flags such as carry, etc
+}
+
+void CPU::op_inc(uint8_t *reg){
+    debug_instr = "INC ";
+    *reg++;
+}
+
+void CPU::op_inc(Regcomb *reg){
+    debug_instr = "INC ";
+    reg->increment();
 }
 
 void CPU::op_adc(uint8_t *val){
