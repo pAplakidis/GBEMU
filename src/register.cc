@@ -24,3 +24,7 @@ uint16_t Regcomb::get(){
 void Regcomb::increment(){
     set(get() + 1);
 }
+
+void Regcomb::decrement(){
+    set(get() - 1);
+}

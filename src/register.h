@@ -16,4 +16,5 @@ public:
     void set(uint16_t new_val);
     uint16_t get();
     void increment();
+    void decrement();
 };

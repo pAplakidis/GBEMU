@@ -405,47 +405,54 @@ void CPU::op_04(){
 }
 
 void CPU::op_05(){
-
+    op_dec(&b);
+    debug_instr.append("B");
 }
 
 void CPU::op_06(){
-
+    op_ld();
 }
 
 void CPU::op_07(){
-
+    op_rlca();
+    debug_instr.append("A");
 }
 
 void CPU::op_08(){
-
+    op_ld();
 }
 
 void CPU::op_09(){
-
+    op_add(hl, bc);
+    debug_instr.append("HL, BC");
 }
 
 void CPU::op_0A(){
-
+    op_ld();
 }
 
 void CPU::op_0B(){
-
+    op_dec(bc);
+    debug_instr.append("BC");
 }
 
 void CPU::op_0C(){
-
+    op_inc(&c);
+    debug_instr.append("C");
 }
 
 void CPU::op_0D(){
-
+    op_dec(&c);
+    debug_instr.append("C");
 }
 
 void CPU::op_0E(){
-
+    op_ld();
 }
 
 void CPU::op_0F(){
-
+    op_rrca();
+    debug_instr.append("A");
 }
 
 void CPU::op_10(){
@@ -927,6 +934,13 @@ void CPU::op_add(uint8_t *reg, uint8_t *val){
     // TODO: set flags such as carry, etc
 }
 
+void CPU::op_add(Regcomb *a, Regcomb *b){
+    debug_instr = "ADD ";
+    a->set(a->get() + b->get());
+
+    // TODO: set flags such as carry, etc
+}
+
 void CPU::op_inc(uint8_t *reg){
     debug_instr = "INC ";
     *reg++;
@@ -935,6 +949,16 @@ void CPU::op_inc(uint8_t *reg){
 void CPU::op_inc(Regcomb *reg){
     debug_instr = "INC ";
     reg->increment();
+}
+
+void CPU::op_dec(uint8_t *reg){
+    debug_instr = "DEC ";
+    *reg--;
+}
+
+void CPU::op_dec(Regcomb *reg){
+    debug_instr = "DEC ";
+    reg->decrement();
 }
 
 void CPU::op_adc(uint8_t *val){
@@ -982,7 +1006,7 @@ void CPU::op_cp(uint8_t *val){
 void CPU::op_jp(uint8_t addr){
     debug_instr = "JP ";
     reg_pc = addr;
-    brk = true;
+    //brk = true;
 
     // TODO: handle flags and conditions
 }
@@ -991,4 +1015,30 @@ void CPU::op_jr(){
     debug_instr = "JR ";
     // TODO
 
+}
+
+void CPU::op_rlc(uint8_t *reg){
+    debug_instr = "RLC ";
+    uint8_t carry = *reg >> 7;
+    uint8_t res = (*reg << 1) | carry;
+    *reg = res;
+    // TODO: set flags as well
+}
+
+void CPU::op_rlca(){
+    debug_instr = "RLCA";
+    op_rlc(&a);
+}
+
+void CPU::op_rrc(uint8_t *reg){
+    debug_instr = "RRC ";
+    uint8_t carry = *reg & 0x1;
+    uint8_t res = (*reg >> 1) | (carry << 7);
+
+    // TODO: handle flags
+}
+
+void CPU::op_rrca(){
+    debug_instr = "RRCA";
+    op_rrc(&a);
 }
