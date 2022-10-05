@@ -48,7 +48,19 @@ void CPU::cycle(){
     // TODO: move to a debugger class
     // for debugging
     if(brk == true){
-        // TODO: print registers and stack values
+        // TODO: print combo registers, flags and stack values as well
+        printf("\nBREAKPOINT\n");
+        printf("Info Registers\n");
+        printf("A: 0x%02x\n", a);
+        printf("B: 0x%02x\n", b);
+        printf("C: 0x%02x\n", c);
+        printf("D: 0x%02x\n", d);
+        printf("E: 0x%02x\n", e);
+        printf("F: 0x%02x\n", f);
+        printf("H: 0x%02x\n", h);
+        printf("L: 0x%02x\n", l);
+        printf("PC: 0x%04x\n", reg_pc);
+        printf("SP: 0x%04x\n", reg_sp);
         exit(0);
     }
 }
@@ -102,6 +114,7 @@ void CPU::execute(uint8_t instr){
             break;
         case 0x0F:
             op_0F();
+            brk = true;
             break;
         case 0x80:
             op_80();
