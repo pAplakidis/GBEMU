@@ -204,6 +204,11 @@ public:
     void op_jr();
     void op_rlc(uint8_t *reg);
     void op_rlca();
+    void op_rl(uint8_t *reg);
+    void op_rla();
     void op_rrc(uint8_t *reg);
     void op_rrca();
+    void op_rr(uint8_t *reg);
+    void op_rra();
+    void op_stop();
 };

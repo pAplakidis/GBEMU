@@ -61,6 +61,11 @@ void CPU::cycle(){
         printf("L: 0x%02x\n", l);
         printf("PC: 0x%04x\n", reg_pc);
         printf("SP: 0x%04x\n", reg_sp);
+
+        printf("AF: 0x%04x\n", af->get());
+        printf("BC: 0x%04x\n", bc->get());
+        printf("DE: 0x%04x\n", de->get());
+        printf("HL: 0x%04x\n", hl->get());
         exit(0);
     }
 }
@@ -114,6 +119,54 @@ void CPU::execute(uint8_t instr){
             break;
         case 0x0F:
             op_0F();
+            break;
+        case 0x10:
+            op_10();
+            break;
+        case 0x11:
+            op_11();
+            break;
+        case 0x12:
+            op_12();
+            break;
+        case 0x13:
+            op_13();
+            break;
+        case 0x14:
+            op_14();
+            break;
+        case 0x15:
+            op_15();
+            break;
+        case 0x16:
+            op_16();
+            break;
+        case 0x17:
+            op_17();
+            break;
+        case 0x18:
+            op_18();
+            break;
+        case 0x19:
+            op_19();
+            break;
+        case 0x1A:
+            op_1A();
+            break;
+        case 0x1B:
+            op_1B();
+            break;
+        case 0x1C:
+            op_1C();
+            break;
+        case 0x1D:
+            op_1D();
+            break;
+        case 0x1E:
+            op_1E();
+            break;
+        case 0x1F:
+            op_1F();
             brk = true;
             break;
         case 0x80:
@@ -469,67 +522,76 @@ void CPU::op_0F(){
 }
 
 void CPU::op_10(){
-
+    op_stop();
 }
 
 void CPU::op_11(){
-
+    op_ld();
 }
 
 void CPU::op_12(){
-
+    op_ld();
 }
 
 void CPU::op_13(){
-
+    op_inc(de);
+    debug_instr.append("DE");
 }
 
 void CPU::op_14(){
-
+    op_inc(&d);
+    debug_instr.append("D");
 }
 
 void CPU::op_15(){
-
+    op_dec(&d);
+    debug_instr.append("D");
 }
 
 void CPU::op_16(){
-
+    op_ld();
 }
 
 void CPU::op_17(){
-
+    op_rla();
+    debug_instr.append("A");
 }
 
 void CPU::op_18(){
-
+    op_jr();
 }
 
 void CPU::op_19(){
-
+    op_add(hl, de);
+    debug_instr.append("HL, DE");
 }
 
 void CPU::op_1A(){
-
+    op_ld();
 }
 
 void CPU::op_1B(){
-
+    op_dec(de);
+    debug_instr.append("DE");
 }
 
 void CPU::op_1C(){
-
+    op_inc(&e);
+    debug_instr.append("E");
 }
 
 void CPU::op_1D(){
-
+    op_dec(&e);
+    debug_instr.append("E");
 }
 
 void CPU::op_1E(){
-
+    op_ld();
 }
 
 void CPU::op_1F(){
-
+    op_rra();
+    debug_instr.append("A");
 }
 
 
@@ -1035,6 +1097,7 @@ void CPU::op_rlc(uint8_t *reg){
     uint8_t carry = *reg >> 7;
     uint8_t res = (*reg << 1) | carry;
     *reg = res;
+
     // TODO: set flags as well
 }
 
@@ -1043,10 +1106,25 @@ void CPU::op_rlca(){
     op_rlc(&a);
 }
 
+void CPU::op_rl(uint8_t *reg){
+    debug_instr = "RL ";
+    uint8_t carry = *reg >> 7;
+    uint8_t res = (*reg << 1) | carry;
+    *reg = res;
+
+    // TODO: set flags (carry is false)
+}
+
+void CPU::op_rla(){
+    debug_instr = "RLA";
+    op_rl(&a);
+}
+
 void CPU::op_rrc(uint8_t *reg){
     debug_instr = "RRC ";
     uint8_t carry = *reg & 0x1;
     uint8_t res = (*reg >> 1) | (carry << 7);
+    *reg = res;
 
     // TODO: handle flags
 }
@@ -1054,4 +1132,22 @@ void CPU::op_rrc(uint8_t *reg){
 void CPU::op_rrca(){
     debug_instr = "RRCA";
     op_rrc(&a);
+}
+
+void CPU::op_rr(uint8_t *reg){
+    debug_instr = "RR ";
+    uint8_t carry = *reg & 0x1;
+    uint8_t res = (*reg >> 1) | (carry << 7);
+    *reg = res;
+
+    // TODO: handle flags (carry = false)
+}
+
+void CPU::op_rra(){
+    debug_instr = "RRA ";
+    op_rr(&a);
+}
+
+void CPU::op_stop(){
+    debug_instr = "STOP ";
 }
