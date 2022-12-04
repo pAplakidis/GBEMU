@@ -453,11 +453,11 @@ void CPU::op_00(){
 }
 
 void CPU::op_01(){
-    op_ld();
+    //op_ld();
 }
 
 void CPU::op_02(){
-    op_ld();
+    //op_ld();
 }
 
 void CPU::op_03(){
@@ -476,7 +476,7 @@ void CPU::op_05(){
 }
 
 void CPU::op_06(){
-    op_ld();
+    //op_ld();
 }
 
 void CPU::op_07(){
@@ -485,7 +485,7 @@ void CPU::op_07(){
 }
 
 void CPU::op_08(){
-    op_ld();
+    //op_ld();
 }
 
 void CPU::op_09(){
@@ -494,7 +494,7 @@ void CPU::op_09(){
 }
 
 void CPU::op_0A(){
-    op_ld();
+    //op_ld();
 }
 
 void CPU::op_0B(){
@@ -513,7 +513,7 @@ void CPU::op_0D(){
 }
 
 void CPU::op_0E(){
-    op_ld();
+    //op_ld();
 }
 
 void CPU::op_0F(){
@@ -526,11 +526,11 @@ void CPU::op_10(){
 }
 
 void CPU::op_11(){
-    op_ld();
+    //op_ld();
 }
 
 void CPU::op_12(){
-    op_ld();
+    //op_ld();
 }
 
 void CPU::op_13(){
@@ -549,7 +549,7 @@ void CPU::op_15(){
 }
 
 void CPU::op_16(){
-    op_ld();
+    //op_ld();
 }
 
 void CPU::op_17(){
@@ -567,7 +567,7 @@ void CPU::op_19(){
 }
 
 void CPU::op_1A(){
-    op_ld();
+    //op_ld();
 }
 
 void CPU::op_1B(){
@@ -586,7 +586,7 @@ void CPU::op_1D(){
 }
 
 void CPU::op_1E(){
-    op_ld();
+    //op_ld();
 }
 
 void CPU::op_1F(){
@@ -998,7 +998,15 @@ void CPU::op_nop(){
     debug_instr = "NOP ";
 }
 
-void CPU::op_ld(){
+void CPU::op_ld(uint8_t src_reg, uint8_t dest_reg){
+    debug_instr = "LD ";
+}
+
+void CPU::op_ld(uint16_t addr, uint8_t dest_reg){
+    debug_instr = "LD ";
+}
+
+void CPU::op_ld(uint8_t src_reg, uint16_t addr){
     debug_instr = "LD ";
 }
 

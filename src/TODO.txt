@@ -1,8 +1,9 @@
 * read ROM  (DONE)
-* correct identation (optional)
+* fix identation (optional)
 * cartridge class
-* opcodes
+* load/store operations
 * memory map
+* opcodes
 
 Components:
 - Sharp SM83 CPU
