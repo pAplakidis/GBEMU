@@ -187,9 +187,12 @@ public:
     // all instructions
     void op_nop();
     // TODO: LD A, (B) is READ, LD (A), B is WRITE
-    void op_ld(uint8_t src_reg, uint8_t dest_reg);
-    void op_ld(uint16_t addr, uint8_t dest_reg);
-    void op_ld(uint8_t src_reg, uint16_t addr);
+    void op_ld(uint8_t *src_reg, uint8_t *dest_reg);    // like mov
+    void op_ld(Regcomb *src_reg, Regcomb *dest_reg);    // like mov
+    void op_ld(uint16_t addr, uint8_t *dest_reg);      // load from addr
+    void op_ld(uint16_t addr, Regcomb *dest_reg);      // load from addr
+    void op_ld(uint8_t *src_reg, uint16_t addr);       // write to addr
+    void op_ld(Regcomb *src_reg, uint16_t addr);       // write to addr
     void op_add(uint8_t *reg, uint8_t *val);
     void op_add(Regcomb *a, Regcomb *b);
     void op_inc(uint8_t *reg);

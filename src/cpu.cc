@@ -167,7 +167,7 @@ void CPU::execute(uint8_t instr){
             break;
         case 0x1F:
             op_1F();
-            brk = true;
+            //brk = true;
             break;
         case 0x80:
             op_80();
@@ -453,7 +453,10 @@ void CPU::op_00(){
 }
 
 void CPU::op_01(){
-    //op_ld();
+    // TODO: load to bc from address of imm
+    uint16_t addr = ++reg_pc;   // TODO: we are loading 16bit value, so we need 8 more bits (next pc?)
+    op_ld(addr, bc);
+    debug_instr.append("BC, imm16");
 }
 
 void CPU::op_02(){
@@ -998,16 +1001,37 @@ void CPU::op_nop(){
     debug_instr = "NOP ";
 }
 
-void CPU::op_ld(uint8_t src_reg, uint8_t dest_reg){
+void CPU::op_ld(uint8_t *src_reg, uint8_t *dest_reg){
     debug_instr = "LD ";
+    *dest_reg = *src_reg;
+    brk = true;
 }
 
-void CPU::op_ld(uint16_t addr, uint8_t dest_reg){
+void CPU::op_ld(Regcomb *src_reg, Regcomb *dest_reg){
     debug_instr = "LD ";
+    brk = true;
 }
 
-void CPU::op_ld(uint8_t src_reg, uint16_t addr){
+void CPU::op_ld(uint16_t addr, uint8_t *dest_reg){
     debug_instr = "LD ";
+    *dest_reg = load(addr);
+    brk = true;
+}
+
+void CPU::op_ld(uint16_t addr, Regcomb *dest_reg){
+    debug_instr = "LD ";
+    brk = true;
+}
+
+void CPU::op_ld(uint8_t *src_reg, uint16_t addr){
+    debug_instr = "LD ";
+    // TODO: implement memory writes first
+    brk = true;
+}
+
+void CPU::op_ld(Regcomb *src_reg, uint16_t addr){
+    debug_instr = "LD ";
+    brk = true;
 }
 
 void CPU::op_add(uint8_t *reg, uint8_t *val){

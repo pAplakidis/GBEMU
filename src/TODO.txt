@@ -3,7 +3,10 @@
 * cartridge class
 * load/store operations
 * memory map
-* opcodes
+* jmp
+* background rendering
+* foreground rendering
+* support games
 
 Components:
 - Sharp SM83 CPU
