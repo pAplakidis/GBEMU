@@ -45,8 +45,10 @@ public:
     CPU(uint8_t *memory_ptr, int m_size);
     ~CPU();
 
-    uint8_t mem_load(uint16_t offset);
-    void mem_store(uint16_t offset, uint8_t data);
+    uint8_t mem_load8(uint16_t offset);
+    uint16_t mem_load16(uint16_t offset);
+    void mem_store8(uint16_t offset, uint8_t data);
+    void mem_store16(uint16_t offset, uint16_t data);
 
     void main_loop();
     void cycle();
@@ -54,7 +56,7 @@ public:
     void store8(uint16_t addr, uint8_t data);
     void store16(uint16_t addr, uint16_t data);
     uint8_t load8(uint16_t addr);
-    uint8_t load16(uint16_t addr);
+    uint16_t load16(uint16_t addr);
 
     // all opcodes
     void op_00();

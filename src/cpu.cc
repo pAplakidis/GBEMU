@@ -426,7 +426,7 @@ void CPU::execute(uint8_t instr){
     }
 }
 
-uint8_t CPU::mem_load(uint16_t offset){
+uint8_t CPU::mem_load8(uint16_t offset){
     size_t off = (size_t)offset;
     if(offset < 8*1024)
         return memory_ptr[off];
@@ -434,15 +434,35 @@ uint8_t CPU::mem_load(uint16_t offset){
     return 0x00;
 }
 
-void CPU::mem_store(uint16_t offset, uint8_t data){
+uint16_t CPU::mem_load16(uint16_t offset){
+    size_t off = (size_t)offset;
+    if(offset < 8*1024)
+        return memory_ptr[off] + (memory_ptr[off+1] << 8);
+
+    return 0x0000;
+}
+
+void CPU::mem_store8(uint16_t offset, uint8_t data){
     size_t off = (size_t)offset;
     if(offset < 8*1024)
         memory_ptr[off] = data;
 
 }
 
+void CPU::mem_store16(uint16_t offset, uint16_t data){
+
+}
+
 void CPU::store8(uint16_t addr, uint8_t data){
+    // TODO: check if addr is aligned
+
+    // TODO: we are currently using just one big junk of memory, but later it needs to utilize the memory map
+    //if(uint16_t *offset = map::ROM_bank0->contains(addr)){
+    //
+    //}
     // TODO: this is temporary since memory map is not finished
+
+    mem_store8(addr, data);
 
 }
 
@@ -460,10 +480,10 @@ uint8_t CPU::load8(uint16_t addr){
     //
     //}
 
-    return mem_load(addr);
+    return mem_load8(addr);
 }
 
-uint8_t CPU::load16(uint16_t addr){
+uint16_t CPU::load16(uint16_t addr){
 
     // TODO: check if addr is aligned
 
@@ -472,7 +492,7 @@ uint8_t CPU::load16(uint16_t addr){
     //
     //}
 
-    return mem_load(addr);
+    return mem_load16(addr);
 }
 
 // All opcodes
@@ -481,14 +501,18 @@ void CPU::op_00(){
 }
 
 void CPU::op_01(){
-    // TODO: load to bc from address of imm
-    uint16_t addr = ++reg_pc;   // TODO: we are loading 16bit value, so we need 8 more bits (next pc?)
+    uint16_t addr_hi = load8(++reg_pc) << 8;
+    uint16_t addr_lo = load8(++reg_pc);
+    uint16_t addr = addr_hi + addr_lo;
+    printf("Imm16: 0x%04x -> ", addr);
     op_ld(addr, bc);
     debug_instr.append("BC, imm16");
 }
 
 void CPU::op_02(){
-    //op_ld();
+    uint16_t addr = bc->get();
+    op_ld(&a, addr);
+    debug_instr.append("(BC), A");
 }
 
 void CPU::op_03(){
@@ -1029,43 +1053,46 @@ void CPU::op_nop(){
     debug_instr = "NOP ";
 }
 
+// NOTE: LD rr, nn means load to rr the contents of nn
 // mov 8bits from src_reg to dest_reg
 void CPU::op_ld(uint8_t *src_reg, uint8_t *dest_reg){
     debug_instr = "LD ";
     *dest_reg = *src_reg;
-    brk = true;
+    //brk = true;
 }
 
 // mov 16bits from src_reg to dest_reg
 void CPU::op_ld(Regcomb *src_reg, Regcomb *dest_reg){
     debug_instr = "LD ";
     dest_reg->set(src_reg->get());
-    brk = true;
+    //brk = true;
 }
 
 // load 8bits from addr in memory to dest_reg
 void CPU::op_ld(uint16_t addr, uint8_t *dest_reg){
     debug_instr = "LD ";
     *dest_reg = load8(addr);
-    brk = true;
+    //brk = true;
 }
 
 // load 16bits from addr in memory to dest_reg
 void CPU::op_ld(uint16_t addr, Regcomb *dest_reg){
     debug_instr = "LD ";
     dest_reg->set(load16(addr));
-    brk = true;
 }
 
+// store 8bits from src_reg to addr in memory
 void CPU::op_ld(uint8_t *src_reg, uint16_t addr){
     debug_instr = "LD ";
-    // TODO: implement memory writes first
+    store8(addr, *src_reg);
     brk = true;
 }
 
+// store 16bits from src_reg to addr in memory
 void CPU::op_ld(Regcomb *src_reg, uint16_t addr){
     debug_instr = "LD ";
-    brk = true;
+    // TODO: implement 16bit memory writes first
+    //brk = true;
 }
 
 void CPU::op_add(uint8_t *reg, uint8_t *val){
