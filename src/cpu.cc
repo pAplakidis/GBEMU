@@ -32,7 +32,7 @@ void CPU::cycle(){
     debug_instr = "";
 
     printf("0x%04x:\t", reg_pc);
-    uint8_t instr = load(reg_pc);
+    uint8_t instr = load8(reg_pc);
     printf("0x%02x =>\t", instr);
 
     execute(instr);
@@ -48,7 +48,7 @@ void CPU::cycle(){
     // TODO: move to a debugger class
     // for debugging
     if(brk == true){
-        // TODO: print combo registers, flags and stack values as well
+        // TODO: print flags and stack values as well
         printf("\nBREAKPOINT\n");
         printf("Info Registers\n");
         printf("A: 0x%02x\n", a);
@@ -66,6 +66,17 @@ void CPU::cycle(){
         printf("BC: 0x%04x\n", bc->get());
         printf("DE: 0x%04x\n", de->get());
         printf("HL: 0x%04x\n", hl->get());
+
+        /*
+        printf("\nMemory Dump:\n");
+        for(int i=0; i < MEMSIZE - 8; i += 8){
+            printf("0x%06x:\t", i);
+            for(int j=i; j < i+8; j++){
+                printf("0x%02x ", memory_ptr[j]);
+            }
+            printf("\n");
+        }
+        */
         exit(0);
     }
 }
@@ -430,12 +441,29 @@ void CPU::mem_store(uint16_t offset, uint8_t data){
 
 }
 
-void CPU::store(uint16_t addr, uint8_t data){
+void CPU::store8(uint16_t addr, uint8_t data){
     // TODO: this is temporary since memory map is not finished
 
 }
 
-uint8_t CPU::load(uint16_t addr){
+void CPU::store16(uint16_t addr, uint16_t data){
+    // TODO: this is temporary since memory map is not finished
+
+}
+
+uint8_t CPU::load8(uint16_t addr){
+
+    // TODO: check if addr is aligned
+
+    // TODO: we are currently using just one big junk of memory, but later it needs to utilize the memory map
+    //if(uint16_t *offset = map::ROM_bank0->contains(addr)){
+    //
+    //}
+
+    return mem_load(addr);
+}
+
+uint8_t CPU::load16(uint16_t addr){
 
     // TODO: check if addr is aligned
 
@@ -1001,25 +1029,31 @@ void CPU::op_nop(){
     debug_instr = "NOP ";
 }
 
+// mov 8bits from src_reg to dest_reg
 void CPU::op_ld(uint8_t *src_reg, uint8_t *dest_reg){
     debug_instr = "LD ";
     *dest_reg = *src_reg;
     brk = true;
 }
 
+// mov 16bits from src_reg to dest_reg
 void CPU::op_ld(Regcomb *src_reg, Regcomb *dest_reg){
     debug_instr = "LD ";
+    dest_reg->set(src_reg->get());
     brk = true;
 }
 
+// load 8bits from addr in memory to dest_reg
 void CPU::op_ld(uint16_t addr, uint8_t *dest_reg){
     debug_instr = "LD ";
-    *dest_reg = load(addr);
+    *dest_reg = load8(addr);
     brk = true;
 }
 
+// load 16bits from addr in memory to dest_reg
 void CPU::op_ld(uint16_t addr, Regcomb *dest_reg){
     debug_instr = "LD ";
+    dest_reg->set(load16(addr));
     brk = true;
 }
 

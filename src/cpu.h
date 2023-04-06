@@ -10,6 +10,8 @@
 #include "instruction.h"
 #include "map.h"
 
+#define MEMSIZE 1024*1024
+
 class CPU{
 private:
     // for debugging
@@ -49,8 +51,10 @@ public:
     void main_loop();
     void cycle();
     void execute(uint8_t instr);
-    void store(uint16_t addr, uint8_t data);
-    uint8_t load(uint16_t addr);
+    void store8(uint16_t addr, uint8_t data);
+    void store16(uint16_t addr, uint16_t data);
+    uint8_t load8(uint16_t addr);
+    uint8_t load16(uint16_t addr);
 
     // all opcodes
     void op_00();
