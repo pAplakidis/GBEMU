@@ -7,5 +7,6 @@ A Gameboy Emulator implemented in C++
 - Implement Jump Instructions
 - Implement Graphics
 - Implement Timing/Cycles
+- Improve Debugging => Separate Debugger
 - Test on games
 
