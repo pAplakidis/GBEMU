@@ -4,6 +4,7 @@
 * load/store operations
 * memory map
 * jmp
+* flags
 * background rendering
 * foreground rendering
 * support games
@@ -15,3 +16,5 @@ Components:
 - Audio Processing Unit
 - 8KB RAM
 - 8KB VRAM
+h
+

@@ -5,10 +5,12 @@
 #include <algorithm>
 #include <iterator>
 #include <iostream>
+#include <fstream>
 
 #include "register.h"
 #include "instruction.h"
 #include "map.h"
+#include "util.h"
 
 #define MEMSIZE 1024*1024
 
@@ -16,7 +18,9 @@ class CPU{
 private:
     // for debugging
     std::string debug_instr = "";
+    std::string mem_dump = "";
     bool brk = false;
+    std::ofstream memdump_file;
 
     // registers (real)
     uint8_t a;
@@ -193,12 +197,13 @@ public:
     // all instructions
     void op_nop();
     // TODO: LD A, (B) is READ, LD (A), B is WRITE
-    void op_ld(uint8_t *src_reg, uint8_t *dest_reg);    // like mov
-    void op_ld(Regcomb *src_reg, Regcomb *dest_reg);    // like mov
-    void op_ld(uint16_t addr, uint8_t *dest_reg);      // load from addr
-    void op_ld(uint16_t addr, Regcomb *dest_reg);      // load from addr
-    void op_ld(uint8_t *src_reg, uint16_t addr);       // write to addr
-    void op_ld(Regcomb *src_reg, uint16_t addr);       // write to addr
+    void op_ld(uint8_t *src_reg, uint8_t *dest_reg);  // like mov
+    void op_ld(Regcomb *src_reg, Regcomb *dest_reg);  // like mov
+    void op_ld(uint16_t addr, uint8_t *dest_reg);     // load from addr
+    void op_ld(uint16_t addr, Regcomb *dest_reg);     // load from addr
+    void op_ld(uint8_t *src_reg, uint16_t addr);      // write to addr
+    void op_ld(Regcomb *src_reg, uint16_t addr);      // write to addr
+    void op_ld(uint16_t *src_reg, uint16_t addr);     // write to addr
     void op_add(uint8_t *reg, uint8_t *val);
     void op_add(Regcomb *a, Regcomb *b);
     void op_inc(uint8_t *reg);
