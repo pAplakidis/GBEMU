@@ -70,7 +70,6 @@ void CPU::cycle(){
         printf("DE: 0x%04x\n", de->get());
         printf("HL: 0x%04x\n", hl->get());
 
-        // TODO: dump memory to string then write to file
         for(int i=0; i < MEMSIZE - 8; i += 8){
             mem_dump.append(string_format("0x%06x:\t", i));
             for(int j=i; j < i+8; j++){
@@ -182,7 +181,6 @@ void CPU::execute(uint8_t instr){
             break;
         case 0x1F:
             op_1F();
-            //brk = true;
             break;
         case 0x80:
             op_80();
@@ -525,7 +523,7 @@ void CPU::op_01(){
 void CPU::op_02(){
   uint16_t addr = bc->get();
   op_ld(&a, addr);
-    debug_instr.append("(BC), A");
+  debug_instr.append("(BC), A");
 }
 
 void CPU::op_03(){
@@ -563,6 +561,7 @@ void CPU::op_08(){
   printf("Imm16: 0x%04x -> ", addr);
   op_ld(&reg_sp, addr);
   debug_instr.append("(Imm16), SP");
+  //brk = true;
 }
 
 void CPU::op_09(){
@@ -574,7 +573,6 @@ void CPU::op_0A(){
   uint16_t addr = bc->get();
   op_ld(addr, &a);
   debug_instr.append("A, (BC)");
-  brk = true;
 }
 
 void CPU::op_0B(){
@@ -593,7 +591,10 @@ void CPU::op_0D(){
 }
 
 void CPU::op_0E(){
-    //op_ld();
+  uint8_t addr = load8(++reg_pc);
+  printf("Imm8: 0x%02x -> ", addr);
+  op_ld(addr, &c);
+  debug_instr.append("C, Imm8");
 }
 
 void CPU::op_0F(){
@@ -606,11 +607,18 @@ void CPU::op_10(){
 }
 
 void CPU::op_11(){
-    //op_ld();
+  uint16_t addr_lo = load8(++reg_pc);
+  uint16_t addr_hi = load8(++reg_pc) << 8;
+  uint16_t addr = addr_hi + addr_lo;
+  printf("Imm16: 0x%04x -> ", addr);
+  op_ld(addr, de);
+  debug_instr.append("DE, imm16");
 }
 
 void CPU::op_12(){
-    //op_ld();
+  uint16_t addr = de->get();
+  op_ld(&a, addr);
+  debug_instr.append("(DE), A");
 }
 
 void CPU::op_13(){
@@ -629,7 +637,10 @@ void CPU::op_15(){
 }
 
 void CPU::op_16(){
-    //op_ld();
+  uint8_t addr = load8(++reg_pc);
+  printf("Imm8: 0x%02x -> ", addr);
+  op_ld(addr, &d);
+  debug_instr.append("D, Imm8");
 }
 
 void CPU::op_17(){
@@ -647,7 +658,9 @@ void CPU::op_19(){
 }
 
 void CPU::op_1A(){
-    //op_ld();
+  uint16_t addr = de->get();
+  op_ld(addr, &a);
+  debug_instr.append("A, (DE)");
 }
 
 void CPU::op_1B(){
@@ -666,7 +679,11 @@ void CPU::op_1D(){
 }
 
 void CPU::op_1E(){
-    //op_ld();
+  uint8_t addr = load8(++reg_pc);
+  printf("Imm8: 0x%02x -> ", addr);
+  op_ld(addr, &e);
+  debug_instr.append("E, Imm8");
+  brk = true;
 }
 
 void CPU::op_1F(){
