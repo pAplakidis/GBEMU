@@ -227,8 +227,53 @@ void CPU::execute(uint8_t instr){
         case 0x2E:
             op_2E();
             break;
-        case 0x2F:
-            op_2F();
+        case 0x30:
+            op_30();
+            break;
+        case 0x31:
+            op_31();
+            break;
+        case 0x32:
+            op_32();
+            break;
+        case 0x33:
+            op_33();
+            break;
+        case 0x34:
+            op_34();
+            break;
+        case 0x35:
+            op_35();
+            break;
+        case 0x36:
+            op_36();
+            break;
+        case 0x37:
+            op_37();
+            break;
+        case 0x38:
+            op_38();
+            break;
+        case 0x39:
+            op_39();
+            break;
+        case 0x3A:
+            op_3A();
+            break;
+        case 0x3B:
+            op_3B();
+            break;
+        case 0x3C:
+            op_3C();
+            break;
+        case 0x3D:
+            op_3D();
+            break;
+        case 0x3E:
+            op_3E();
+            break;
+        case 0x3F:
+            op_3F();
             break;
         case 0x80:
             op_80();
@@ -818,11 +863,97 @@ void CPU::op_2E(){
   printf("Imm8: 0x%02x -> ", addr);
   op_ld(addr, &l);
   debug_instr.append("L, Imm8");
-  brk = true;
 }
 
 void CPU::op_2F(){
     op_cpl();
+}
+
+void CPU::op_30(){
+  //op_jr();
+}
+
+void CPU::op_31(){
+  uint16_t addr_lo = load8(++reg_pc);
+  uint16_t addr_hi = load8(++reg_pc) << 8;
+  uint16_t addr = addr_hi + addr_lo;
+  printf("Imm16: 0x%04x -> ", addr);
+  op_ld(addr, &reg_sp);
+  debug_instr.append("SP, imm16");
+}
+
+void CPU::op_32(){
+  uint16_t addr = (hl->get()) - 1;
+  op_ld(&a, addr);
+  debug_instr.append("(HL-), A");
+}
+
+void CPU::op_33(){
+    op_inc(&reg_sp);
+    debug_instr.append("SP");
+}
+
+void CPU::op_34(){
+    op_inc(hl->get());
+    debug_instr.append("(HL)");
+}
+
+void CPU::op_35(){
+    op_dec(hl->get());
+    debug_instr.append("(HL)");
+}
+
+void CPU::op_36(){
+  uint8_t addr = load8(++reg_pc);
+  printf("Imm8: 0x%02x -> ", addr);
+  op_ld(addr, hl->get());
+  debug_instr.append("(HL), Imm8");
+}
+
+void CPU::op_37(){
+  op_scf();
+}
+
+void CPU::op_38(){
+    //op_jr();
+}
+
+void CPU::op_39(){
+    op_add(hl, &reg_sp);
+    debug_instr.append("HL, SP");
+    brk = true;
+}
+
+void CPU::op_3A(){
+  uint16_t addr = (hl->get()) - 1;
+  op_ld(addr, &a);
+  debug_instr.append("A, (HL-)");
+}
+
+void CPU::op_3B(){
+    op_dec(&reg_sp);
+    debug_instr.append("SP");
+}
+
+void CPU::op_3C(){
+    op_inc(&a);
+    debug_instr.append("A");
+}
+
+void CPU::op_3D(){
+    op_dec(&a);
+    debug_instr.append("A");
+}
+
+void CPU::op_3E(){
+  uint8_t addr = load8(++reg_pc);
+  printf("Imm8: 0x%02x -> ", addr);
+  op_ld(addr, &a);
+  debug_instr.append("A, Imm8");
+}
+
+void CPU::op_3F(){
+    op_ccf();
 }
 
 void CPU::op_80(){
@@ -1234,67 +1365,85 @@ void CPU::op_nop(){
 
 // mov 8bits from src_reg to dest_reg
 void CPU::op_ld(uint8_t *src_reg, uint8_t *dest_reg){
-    debug_instr = "LD ";
-    *dest_reg = *src_reg;
-    //brk = true;
+  debug_instr = "LD ";
+  *dest_reg = *src_reg;
 }
 
 // mov 16bits from src_reg to dest_reg
 void CPU::op_ld(Regcomb *src_reg, Regcomb *dest_reg){
-    debug_instr = "LD ";
-    dest_reg->set(src_reg->get());
-    //brk = true;
+  debug_instr = "LD ";
+  dest_reg->set(src_reg->get());
+}
+
+// mov 8bits from src_addr to dest_addr
+void CPU::op_ld(uint16_t src_addr, uint16_t dest_addr){
+  debug_instr = "LD ";
+  store8(dest_addr, load8(src_addr));
 }
 
 // load 8bits from addr in memory to dest_reg
 void CPU::op_ld(uint16_t addr, uint8_t *dest_reg){
-    debug_instr = "LD ";
-    *dest_reg = load8(addr);
-    //brk = true;
+  debug_instr = "LD ";
+  *dest_reg = load8(addr);
 }
 
 // load 16bits from addr in memory to dest_reg
 void CPU::op_ld(uint16_t addr, Regcomb *dest_reg){
-    debug_instr = "LD ";
-    dest_reg->set(load16(addr));
+  debug_instr = "LD ";
+  dest_reg->set(load16(addr));
+}
+
+// load 16bits from addr in memory to 16bit dest_reg (specifically SP)
+void CPU::op_ld(uint16_t addr, uint16_t *dest_reg){
+  debug_instr = "LD ";
+  *dest_reg = load16(addr);
 }
 
 // store 8bits from src_reg to addr in memory
 void CPU::op_ld(uint8_t *src_reg, uint16_t addr){
-    debug_instr = "LD ";
-    store8(addr, *src_reg);
-    //brk = true;
+  debug_instr = "LD ";
+  store8(addr, *src_reg);
 }
 
 // store 16bits from src_reg to addr in memory
 void CPU::op_ld(Regcomb *src_reg, uint16_t addr){
-    debug_instr = "LD ";
-    store16(addr, src_reg->get());
-    //brk = true;
+  debug_instr = "LD ";
+  store16(addr, src_reg->get());
 }
 
 // store 16bits from src_reg (specifically SP) to addr in memory
 void CPU::op_ld(uint16_t *src_reg, uint16_t addr){
-    debug_instr = "LD ";
-    store16(addr, *src_reg);
-    //brk = true;
+  debug_instr = "LD ";
+  store16(addr, *src_reg);
 }
 
 void CPU::op_add(uint8_t *reg, uint8_t *val){
-    debug_instr = "ADD ";
-    *reg = *reg + *val;
+  debug_instr = "ADD ";
+  *reg = *reg + *val;
 
-    // TODO: set flags such as carry, etc
+  // TODO: set flags such as carry, etc
 }
 
 void CPU::op_add(Regcomb *a, Regcomb *b){
-    debug_instr = "ADD ";
-    a->set(a->get() + b->get());
+  debug_instr = "ADD ";
+  a->set(a->get() + b->get());
 
-    // TODO: set flags such as carry, etc
+  // TODO: set flags such as carry, etc
+}
+
+void CPU::op_add(Regcomb *a, uint16_t *b){
+  debug_instr = "ADD ";
+  a->set(a->get() + *b);
+
+  // TODO: set flags such as carry, etc
 }
 
 void CPU::op_inc(uint8_t *reg){
+    debug_instr = "INC ";
+    *reg++;
+}
+
+void CPU::op_inc(uint16_t *reg){
     debug_instr = "INC ";
     *reg++;
 }
@@ -1304,7 +1453,19 @@ void CPU::op_inc(Regcomb *reg){
     reg->increment();
 }
 
+void CPU::op_inc(uint16_t addr){
+  debug_instr = "INC ";
+  uint8_t val = load8(addr);
+  val++;
+  store8(addr, val);
+}
+
 void CPU::op_dec(uint8_t *reg){
+    debug_instr = "DEC ";
+    *reg--;
+}
+
+void CPU::op_dec(uint16_t *reg){
     debug_instr = "DEC ";
     *reg--;
 }
@@ -1312,6 +1473,13 @@ void CPU::op_dec(uint8_t *reg){
 void CPU::op_dec(Regcomb *reg){
     debug_instr = "DEC ";
     reg->decrement();
+}
+
+void CPU::op_dec(uint16_t addr){
+  debug_instr = "DEC ";
+  uint8_t val = load8(addr);
+  val--;
+  store8(addr, val);
 }
 
 void CPU::op_adc(uint8_t *val){
@@ -1433,9 +1601,32 @@ void CPU::op_rra(){
     op_rr(&a);
 }
 
-// TODO: write this
 void CPU::op_daa(){
-  debug_instr = "DAA";
+  debug_instr = "DAA ";
+  // TODO: handle flags
+  /*
+  // note: assumes a is a uint8_t and wraps from 0xff to 0
+  if (!n_flag) {  // after an addition, adjust if (half-)carry occurred or if result is out of bounds
+    if (c_flag || a > 0x99) { a += 0x60; c_flag = 1; }
+    if (h_flag || (a & 0x0f) > 0x09) { a += 0x6; }
+  } else {  // after a subtraction, only adjust if (half-)carry occurred
+    if (c_flag) { a -= 0x60; }
+    if (h_flag) { a -= 0x6; }
+  }
+  // these flags are always updated
+  z_flag = (a == 0); // the usual z flag
+  h_flag = 0; // h flag is always cleared
+  */
+}
+
+// TODO: write this
+void CPU::op_scf(){
+  debug_instr = "SCF ";
+}
+
+// TODO: write this
+void CPU::op_ccf(){
+  debug_instr = "CCF ";
 }
 
 void CPU::op_stop(){

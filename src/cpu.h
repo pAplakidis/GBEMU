@@ -111,6 +111,22 @@ public:
     void op_2D();
     void op_2E();
     void op_2F();
+    void op_30();
+    void op_31();
+    void op_32();
+    void op_33();
+    void op_34();
+    void op_35();
+    void op_36();
+    void op_37();
+    void op_38();
+    void op_39();
+    void op_3A();
+    void op_3B();
+    void op_3C();
+    void op_3D();
+    void op_3E();
+    void op_3F();
     // TODO: support more opcodes
     void op_80();
     void op_81();
@@ -212,20 +228,26 @@ public:
 
     // all instructions
     void op_nop();
-    // TODO: LD A, (B) is READ, LD (A), B is WRITE
     void op_ld(uint8_t *src_reg, uint8_t *dest_reg);  // like mov
     void op_ld(Regcomb *src_reg, Regcomb *dest_reg);  // like mov
+    void op_ld(uint16_t src_addr, uint16_t dest_addr);// mov from one addr to another
     void op_ld(uint16_t addr, uint8_t *dest_reg);     // load from addr
     void op_ld(uint16_t addr, Regcomb *dest_reg);     // load from addr
+    void op_ld(uint16_t addr, uint16_t *dest_reg);    // load from addr
     void op_ld(uint8_t *src_reg, uint16_t addr);      // write to addr
     void op_ld(Regcomb *src_reg, uint16_t addr);      // write to addr
     void op_ld(uint16_t *src_reg, uint16_t addr);     // write to addr
     void op_add(uint8_t *reg, uint8_t *val);
     void op_add(Regcomb *a, Regcomb *b);
+    void op_add(Regcomb *a, uint16_t *b);
     void op_inc(uint8_t *reg);
+    void op_inc(uint16_t *reg);
     void op_inc(Regcomb *reg);
+    void op_inc(uint16_t addr);
     void op_dec(uint8_t *reg);
+    void op_dec(uint16_t *reg);
     void op_dec(Regcomb *reg);
+    void op_dec(uint16_t addr);
     void op_adc(uint8_t *val);
     void op_sub(uint8_t *reg, uint8_t *val);
     void op_sbc(uint8_t *val);
@@ -245,5 +267,7 @@ public:
     void op_rr(uint8_t *reg);
     void op_rra();
     void op_daa();
+    void op_scf();
+    void op_ccf();
     void op_stop();
 };
