@@ -12,7 +12,8 @@ make
 
 ## TODO
 - Implement Full Memory Map
-- Implement Load and Store Instructions
+- Implement Load and Store Instructions (DONE)
+- Implement Flags
 - Implement Jump Instructions
 - Implement Graphics
 - Implement Timing/Cycles

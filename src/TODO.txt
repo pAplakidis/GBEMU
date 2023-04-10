@@ -1,10 +1,10 @@
 * read ROM  (DONE)
 * fix identation (optional)
 * cartridge class
-* load/store operations
+* load/store operations (DONE)
 * memory map
-* jmp
 * flags
+* jp, jr
 * background rendering
 * foreground rendering
 * support games

@@ -605,12 +605,11 @@ void CPU::op_00(){
 }
 
 void CPU::op_01(){
-  uint16_t addr_lo = load8(++reg_pc);
-  uint16_t addr_hi = load8(++reg_pc) << 8;
+  uint16_t addr_lo = (uint16_t)load8(++reg_pc);
+  uint16_t addr_hi = (uint16_t)(load8(++reg_pc)) << 8;
   uint16_t addr = addr_hi + addr_lo;
-  printf("Imm16: 0x%04x -> ", addr);
   op_ld(addr, bc);
-  debug_instr.append("BC, imm16");
+  debug_instr.append(string_format("BC, Imm16:0x%04x", addr));
 }
 
 void CPU::op_02(){
@@ -636,9 +635,8 @@ void CPU::op_05(){
 
 void CPU::op_06(){
   uint8_t addr = load8(++reg_pc);
-  printf("Imm8: 0x%02x -> ", addr);
   op_ld(addr, &b);
-  debug_instr.append("B, Imm8");
+  debug_instr.append(string_format("B, Imm8:0x%02x", addr));
 }
 
 void CPU::op_07(){
@@ -648,12 +646,11 @@ void CPU::op_07(){
 
 // TODO: double check this
 void CPU::op_08(){
-  uint16_t addr_lo = load8(++reg_pc);
-  uint16_t addr_hi = load8(++reg_pc) << 8;
+  uint16_t addr_lo = (uint16_t)load8(++reg_pc);
+  uint16_t addr_hi = (uint16_t)(load8(++reg_pc)) << 8;
   uint16_t addr = addr_hi + addr_lo;
-  printf("Imm16: 0x%04x -> ", addr);
   op_ld(&reg_sp, addr);
-  debug_instr.append("(Imm16), SP");
+  debug_instr.append(string_format("(Imm16:0x%04x), SP", addr));
   //brk = true;
 }
 
@@ -685,9 +682,8 @@ void CPU::op_0D(){
 
 void CPU::op_0E(){
   uint8_t addr = load8(++reg_pc);
-  printf("Imm8: 0x%02x -> ", addr);
   op_ld(addr, &c);
-  debug_instr.append("C, Imm8");
+  debug_instr.append(string_format("C, Imm8:0x%02x", addr));
 }
 
 void CPU::op_0F(){
@@ -700,12 +696,11 @@ void CPU::op_10(){
 }
 
 void CPU::op_11(){
-  uint16_t addr_lo = load8(++reg_pc);
-  uint16_t addr_hi = load8(++reg_pc) << 8;
+  uint16_t addr_lo = (uint16_t)load8(++reg_pc);
+  uint16_t addr_hi = (uint16_t)(load8(++reg_pc)) << 8;
   uint16_t addr = addr_hi + addr_lo;
-  printf("Imm16: 0x%04x -> ", addr);
   op_ld(addr, de);
-  debug_instr.append("DE, imm16");
+  debug_instr.append(string_format("DE, Imm16:0x%04x", addr));
 }
 
 void CPU::op_12(){
@@ -731,9 +726,8 @@ void CPU::op_15(){
 
 void CPU::op_16(){
   uint8_t addr = load8(++reg_pc);
-  printf("Imm8: 0x%02x -> ", addr);
   op_ld(addr, &d);
-  debug_instr.append("D, Imm8");
+  debug_instr.append(string_format("D, Imm8:0x%02x", addr));
 }
 
 void CPU::op_17(){
@@ -773,9 +767,8 @@ void CPU::op_1D(){
 
 void CPU::op_1E(){
   uint8_t addr = load8(++reg_pc);
-  printf("Imm8: 0x%02x -> ", addr);
   op_ld(addr, &e);
-  debug_instr.append("E, Imm8");
+  debug_instr.append(string_format("E, Imm8:0x%02x", addr));
 }
 
 void CPU::op_1F(){
@@ -788,12 +781,11 @@ void CPU::op_20(){
 }
 
 void CPU::op_21(){
-  uint16_t addr_lo = load8(++reg_pc);
-  uint16_t addr_hi = load8(++reg_pc) << 8;
+  uint16_t addr_lo = (uint16_t)load8(++reg_pc);
+  uint16_t addr_hi = (uint16_t)(load8(++reg_pc)) << 8;
   uint16_t addr = addr_hi + addr_lo;
-  printf("Imm16: 0x%04x -> ", addr);
   op_ld(addr, hl);
-  debug_instr.append("HL, imm16");
+  debug_instr.append(string_format("HL, Imm16:0x%04x", addr));
 }
 
 void CPU::op_22(){
@@ -819,9 +811,8 @@ void CPU::op_25(){
 
 void CPU::op_26(){
   uint8_t addr = load8(++reg_pc);
-  printf("Imm8: 0x%02x -> ", addr);
   op_ld(addr, &h);
-  debug_instr.append("H, Imm8");
+  debug_instr.append(string_format("H, Imm8:0x%02x", addr));
 }
 
 void CPU::op_27(){
@@ -860,9 +851,8 @@ void CPU::op_2D(){
 
 void CPU::op_2E(){
   uint8_t addr = load8(++reg_pc);
-  printf("Imm8: 0x%02x -> ", addr);
   op_ld(addr, &l);
-  debug_instr.append("L, Imm8");
+  debug_instr.append(string_format("L, Imm8:0x%02x", addr));
 }
 
 void CPU::op_2F(){
@@ -874,12 +864,11 @@ void CPU::op_30(){
 }
 
 void CPU::op_31(){
-  uint16_t addr_lo = load8(++reg_pc);
-  uint16_t addr_hi = load8(++reg_pc) << 8;
+  uint16_t addr_lo = (uint16_t)load8(++reg_pc);
+  uint16_t addr_hi = (uint16_t)(load8(++reg_pc)) << 8;
   uint16_t addr = addr_hi + addr_lo;
-  printf("Imm16: 0x%04x -> ", addr);
   op_ld(addr, &reg_sp);
-  debug_instr.append("SP, imm16");
+  debug_instr.append(string_format("SP, Imm16:0x%04x", addr));
 }
 
 void CPU::op_32(){
@@ -905,9 +894,8 @@ void CPU::op_35(){
 
 void CPU::op_36(){
   uint8_t addr = load8(++reg_pc);
-  printf("Imm8: 0x%02x -> ", addr);
   op_ld(addr, hl->get());
-  debug_instr.append("(HL), Imm8");
+  debug_instr.append(string_format("(HL), Imm8:0x%02x", addr));
 }
 
 void CPU::op_37(){
@@ -921,7 +909,6 @@ void CPU::op_38(){
 void CPU::op_39(){
     op_add(hl, &reg_sp);
     debug_instr.append("HL, SP");
-    brk = true;
 }
 
 void CPU::op_3A(){
@@ -947,9 +934,8 @@ void CPU::op_3D(){
 
 void CPU::op_3E(){
   uint8_t addr = load8(++reg_pc);
-  printf("Imm8: 0x%02x -> ", addr);
   op_ld(addr, &a);
-  debug_instr.append("A, Imm8");
+  debug_instr.append(string_format("A, Imm8:0x%02x", addr));
 }
 
 void CPU::op_3F(){
@@ -1290,15 +1276,20 @@ void CPU::op_C1(){
 }
 
 void CPU::op_C2(){
-    // TODO: pass address
-    //op_jp();
-    debug_instr.append("NZ, addr");
+  uint8_t addr_lo = load8(++reg_pc);
+  uint8_t addr_hi = load8(++reg_pc);
+  uint16_t addr = (uint16_t)(addr_hi << 8) + (uint16_t)addr_lo;
+  //op_jp(nz, addr);  // TODO: need to implement flags first
+  debug_instr.append(string_format("NZ, Imm16:0x%04x", addr));
 }
 
 void CPU::op_C3(){
-    // TODO: pass address
-    //op_jp();
-    debug_instr.append("addr");
+  uint8_t addr_lo = load8(++reg_pc);
+  uint8_t addr_hi = load8(++reg_pc);
+  uint16_t addr = (uint16_t)(addr_hi << 8) + (uint16_t)addr_lo;
+  op_jp(addr);
+  debug_instr.append(string_format("Imm16:0x%04x", addr));
+  brk = true;
 }
 
 void CPU::op_C4(){
@@ -1326,10 +1317,11 @@ void CPU::op_C9(){
 }
 
 void CPU::op_CA(){
-    // TODO: add address
-    //op_jp();
-    debug_instr.append("Z, addr");
-
+  uint8_t addr_lo = load8(++reg_pc);
+  uint8_t addr_hi = load8(++reg_pc);
+  uint16_t addr = (uint16_t)(addr_hi << 8) + (uint16_t)addr_lo;
+  //op_jp(z, addr);
+  debug_instr.append(string_format("Z, Imm16:0x%04x", addr));
 }
 
 void CPU::op_CB(){
@@ -1531,12 +1523,25 @@ void CPU::op_cpl(){
   // TODO: update flags (N = 1, H = 1)
 }
 
-void CPU::op_jp(uint8_t addr){
+void CPU::op_jp(uint16_t addr){
     debug_instr = "JP ";
-    reg_pc = addr;
-    //brk = true;
+    reg_pc = addr-1;  // we subtract 1 because in cycle reg pc is incremented before moving to the next one
+}
 
-    // TODO: handle flags and conditions
+// Uncoditional jump to the absolute address specified by 16bit register (specifically HL)
+void CPU::op_jp(Regcomb *reg){
+    debug_instr = "JP ";
+    reg_pc = reg->get() - 1;  // we subtract 1 because in cycle reg pc is incremented before moving to the next one
+}
+
+// Conditional jump to 16bit addr depending on condition from reg
+void CPU::op_jp(uint8_t *reg, uint16_t addr){
+    debug_instr = "JP ";
+}
+
+// Conditional jump to 16bit addr depending on condition from reg
+void CPU::op_jp(uint16_t *reg, uint16_t addr){
+    debug_instr = "JP ";
 }
 
 void CPU::op_jr(){

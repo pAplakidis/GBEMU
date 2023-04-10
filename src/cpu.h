@@ -256,7 +256,10 @@ public:
     void op_or(uint8_t *val);
     void op_cp(uint8_t *val);
     void op_cpl();
-    void op_jp(uint8_t addr);
+    void op_jp(uint16_t addr);
+    void op_jp(Regcomb *reg);
+    void op_jp(uint8_t *reg, uint16_t addr);
+    void op_jp(uint16_t *reg, uint16_t addr);
     void op_jr();
     void op_rlc(uint8_t *reg);
     void op_rlca();
