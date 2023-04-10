@@ -95,7 +95,23 @@ public:
     void op_1D();
     void op_1E();
     void op_1F();
-    // TODO: add more opcodes
+    void op_20();
+    void op_21();
+    void op_22();
+    void op_23();
+    void op_24();
+    void op_25();
+    void op_26();
+    void op_27();
+    void op_28();
+    void op_29();
+    void op_2A();
+    void op_2B();
+    void op_2C();
+    void op_2D();
+    void op_2E();
+    void op_2F();
+    // TODO: support more opcodes
     void op_80();
     void op_81();
     void op_82();
@@ -176,7 +192,7 @@ public:
     void op_CD();
     void op_CE();
     void op_CF();
-    // TODO: add more opcodes
+    // TODO: support more opcodes
     void op_F0();
     void op_F1();
     void op_F2();
@@ -217,6 +233,7 @@ public:
     void op_xor(uint8_t *val);
     void op_or(uint8_t *val);
     void op_cp(uint8_t *val);
+    void op_cpl();
     void op_jp(uint8_t addr);
     void op_jr();
     void op_rlc(uint8_t *reg);
@@ -227,5 +244,6 @@ public:
     void op_rrca();
     void op_rr(uint8_t *reg);
     void op_rra();
+    void op_daa();
     void op_stop();
 };

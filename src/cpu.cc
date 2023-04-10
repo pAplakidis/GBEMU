@@ -70,9 +70,9 @@ void CPU::cycle(){
         printf("DE: 0x%04x\n", de->get());
         printf("HL: 0x%04x\n", hl->get());
 
-        for(int i=0; i < MEMSIZE - 8; i += 8){
-            mem_dump.append(string_format("0x%06x:\t", i));
-            for(int j=i; j < i+8; j++){
+        for(int i=0; i <= MEMSIZE - 16; i += 16){
+            mem_dump.append(string_format("0x%05x:\t", i));
+            for(int j=i; j < i+16; j++){
                 mem_dump.append(string_format("0x%02x ", memory_ptr[j]));
             }
             mem_dump.append("\n");
@@ -181,6 +181,54 @@ void CPU::execute(uint8_t instr){
             break;
         case 0x1F:
             op_1F();
+            break;
+        case 0x20:
+            op_20();
+            break;
+        case 0x21:
+            op_21();
+            break;
+        case 0x22:
+            op_22();
+            break;
+        case 0x23:
+            op_23();
+            break;
+        case 0x24:
+            op_24();
+            break;
+        case 0x25:
+            op_25();
+            break;
+        case 0x26:
+            op_26();
+            break;
+        case 0x27:
+            op_27();
+            break;
+        case 0x28:
+            op_28();
+            break;
+        case 0x29:
+            op_29();
+            break;
+        case 0x2A:
+            op_2A();
+            break;
+        case 0x2B:
+            op_2B();
+            break;
+        case 0x2C:
+            op_1C();
+            break;
+        case 0x2D:
+            op_2D();
+            break;
+        case 0x2E:
+            op_2E();
+            break;
+        case 0x2F:
+            op_2F();
             break;
         case 0x80:
             op_80();
@@ -649,7 +697,7 @@ void CPU::op_17(){
 }
 
 void CPU::op_18(){
-    op_jr();
+    //op_jr();
 }
 
 void CPU::op_19(){
@@ -683,7 +731,6 @@ void CPU::op_1E(){
   printf("Imm8: 0x%02x -> ", addr);
   op_ld(addr, &e);
   debug_instr.append("E, Imm8");
-  brk = true;
 }
 
 void CPU::op_1F(){
@@ -691,6 +738,92 @@ void CPU::op_1F(){
     debug_instr.append("A");
 }
 
+void CPU::op_20(){
+  //op_jr();
+}
+
+void CPU::op_21(){
+  uint16_t addr_lo = load8(++reg_pc);
+  uint16_t addr_hi = load8(++reg_pc) << 8;
+  uint16_t addr = addr_hi + addr_lo;
+  printf("Imm16: 0x%04x -> ", addr);
+  op_ld(addr, hl);
+  debug_instr.append("HL, imm16");
+}
+
+void CPU::op_22(){
+  uint16_t addr = (hl->get()) + 1;
+  op_ld(&a, addr);
+  debug_instr.append("(HL+), A");
+}
+
+void CPU::op_23(){
+    op_inc(hl);
+    debug_instr.append("HL");
+}
+
+void CPU::op_24(){
+    op_inc(&h);
+    debug_instr.append("H");
+}
+
+void CPU::op_25(){
+    op_dec(&h);
+    debug_instr.append("H");
+}
+
+void CPU::op_26(){
+  uint8_t addr = load8(++reg_pc);
+  printf("Imm8: 0x%02x -> ", addr);
+  op_ld(addr, &h);
+  debug_instr.append("H, Imm8");
+}
+
+void CPU::op_27(){
+    op_daa();
+}
+
+void CPU::op_28(){
+    //op_jr();
+}
+
+void CPU::op_29(){
+    op_add(hl, hl);
+    debug_instr.append("HL, HL");
+}
+
+void CPU::op_2A(){
+  uint16_t addr = (hl->get()) + 1;
+  op_ld(addr, &a);
+  debug_instr.append("A, (HL+)");
+}
+
+void CPU::op_2B(){
+    op_dec(hl);
+    debug_instr.append("hl");
+}
+
+void CPU::op_2C(){
+    op_inc(&l);
+    debug_instr.append("L");
+}
+
+void CPU::op_2D(){
+    op_dec(&l);
+    debug_instr.append("L");
+}
+
+void CPU::op_2E(){
+  uint8_t addr = load8(++reg_pc);
+  printf("Imm8: 0x%02x -> ", addr);
+  op_ld(addr, &l);
+  debug_instr.append("L, Imm8");
+  brk = true;
+}
+
+void CPU::op_2F(){
+    op_cpl();
+}
 
 void CPU::op_80(){
     op_add(&a, &b);
@@ -723,9 +856,9 @@ void CPU::op_85(){
 }
 
 void CPU::op_86(){
-    // TODO
-    op_add(&a, &e);
-    debug_instr.append("A, (HL)");
+  uint8_t val = load8(hl->get());
+  op_add(&a, &val);
+  debug_instr.append("A, (HL)");
 }
 
 void CPU::op_87(){
@@ -764,9 +897,9 @@ void CPU::op_8D(){
 }
 
 void CPU::op_8E(){
-    // TODO
-    op_adc(&e);
-    debug_instr.append("A, (HL)");
+  uint8_t val = load8(hl->get());
+  op_adc(&val);
+  debug_instr.append("A, (HL)");
 }
 
 void CPU::op_8F(){
@@ -805,9 +938,9 @@ void CPU::op_95(){
 }
 
 void CPU::op_96(){
-    // TODO
-    op_sub(&a, &e);
-    debug_instr.append("A, (HL)");
+  uint8_t val = load8(hl->get());
+  op_sub(&a, &val);
+  debug_instr.append("A, (HL)");
 }
 
 void CPU::op_97(){
@@ -846,9 +979,9 @@ void CPU::op_9D(){
 }
 
 void CPU::op_9E(){
-    // TODO
-    op_sbc(&e);
-    debug_instr.append("A, (HL)");
+  uint8_t val = load8(hl->get());
+  op_sbc(&val);
+  debug_instr.append("A, (HL)");
 }
 
 void CPU::op_9F(){
@@ -887,9 +1020,9 @@ void CPU::op_A5(){
 }
 
 void CPU::op_A6(){
-    // TODO
-    op_and(&e);
-    debug_instr.append("A, (HL)");
+  uint8_t val = load8(hl->get());
+  op_and(&val);
+  debug_instr.append("A, (HL)");
 }
 
 void CPU::op_A7(){
@@ -1223,6 +1356,13 @@ void CPU::op_cp(uint8_t *val){
     // TODO: update flags
 }
 
+void CPU::op_cpl(){
+  debug_instr = "CPL";
+  a = ~a;
+
+  // TODO: update flags (N = 1, H = 1)
+}
+
 void CPU::op_jp(uint8_t addr){
     debug_instr = "JP ";
     reg_pc = addr;
@@ -1291,6 +1431,11 @@ void CPU::op_rr(uint8_t *reg){
 void CPU::op_rra(){
     debug_instr = "RRA ";
     op_rr(&a);
+}
+
+// TODO: write this
+void CPU::op_daa(){
+  debug_instr = "DAA";
 }
 
 void CPU::op_stop(){

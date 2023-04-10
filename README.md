@@ -1,6 +1,15 @@
 # GBEMU
 A Gameboy Emulator implemented in C++
 
+## USAGE
+```
+mkdir build
+cd build
+cmake ..
+make
+./GBEMU <paht to .gb file>
+```
+
 ## TODO
 - Implement Full Memory Map
 - Implement Load and Store Instructions
