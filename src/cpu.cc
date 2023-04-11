@@ -275,6 +275,198 @@ void CPU::execute(uint8_t instr){
         case 0x3F:
             op_3F();
             break;
+        case 0x40:
+            op_40();
+            break;
+        case 0x41:
+            op_41();
+            break;
+        case 0x42:
+            op_42();
+            break;
+        case 0x43:
+            op_43();
+            break;
+        case 0x44:
+            op_44();
+            break;
+        case 0x45:
+            op_45();
+            break;
+        case 0x46:
+            op_46();
+            break;
+        case 0x47:
+            op_47();
+            break;
+        case 0x48:
+            op_48();
+            break;
+        case 0x49:
+            op_49();
+            break;
+        case 0x4A:
+            op_4A();
+            break;
+        case 0x4B:
+            op_4B();
+            break;
+        case 0x4C:
+            op_4C();
+            break;
+        case 0x4D:
+            op_4D();
+            break;
+        case 0x4E:
+            op_4E();
+            break;
+        case 0x4F:
+            op_4F();
+            break;
+        case 0x50:
+            op_50();
+            break;
+        case 0x51:
+            op_51();
+            break;
+        case 0x52:
+            op_52();
+            break;
+        case 0x53:
+            op_53();
+            break;
+        case 0x54:
+            op_54();
+            break;
+        case 0x55:
+            op_55();
+            break;
+        case 0x56:
+            op_56();
+            break;
+        case 0x57:
+            op_57();
+            break;
+        case 0x58:
+            op_58();
+            break;
+        case 0x59:
+            op_59();
+            break;
+        case 0x5A:
+            op_5A();
+            break;
+        case 0x5B:
+            op_5B();
+            break;
+        case 0x5C:
+            op_5C();
+            break;
+        case 0x5D:
+            op_5D();
+            break;
+        case 0x5E:
+            op_5E();
+            break;
+        case 0x5F:
+            op_5F();
+            break;
+        case 0x60:
+            op_60();
+            break;
+        case 0x61:
+            op_61();
+            break;
+        case 0x62:
+            op_62();
+            break;
+        case 0x63:
+            op_63();
+            break;
+        case 0x64:
+            op_64();
+            break;
+        case 0x65:
+            op_65();
+            break;
+        case 0x66:
+            op_66();
+            break;
+        case 0x67:
+            op_67();
+            break;
+        case 0x68:
+            op_68();
+            break;
+        case 0x69:
+            op_69();
+            break;
+        case 0x6A:
+            op_6A();
+            break;
+        case 0x6B:
+            op_6B();
+            break;
+        case 0x6C:
+            op_6C();
+            break;
+        case 0x6D:
+            op_6D();
+            break;
+        case 0x6E:
+            op_6E();
+            break;
+        case 0x6F:
+            op_6F();
+            break;
+        case 0x70:
+            op_70();
+            break;
+        case 0x71:
+            op_71();
+            break;
+        case 0x72:
+            op_72();
+            break;
+        case 0x73:
+            op_73();
+            break;
+        case 0x74:
+            op_74();
+            break;
+        case 0x75:
+            op_75();
+            break;
+        case 0x76:
+            op_76();
+            break;
+        case 0x77:
+            op_77();
+            break;
+        case 0x78:
+            op_78();
+            break;
+        case 0x79:
+            op_79();
+            break;
+        case 0x7A:
+            op_7A();
+            break;
+        case 0x7B:
+            op_7B();
+            break;
+        case 0x7C:
+            op_7C();
+            break;
+        case 0x7D:
+            op_7D();
+            break;
+        case 0x7E:
+            op_7E();
+            break;
+        case 0x7F:
+            op_7F();
+            break;
         case 0x80:
             op_80();
             break;
@@ -940,6 +1132,325 @@ void CPU::op_3E(){
 
 void CPU::op_3F(){
     op_ccf();
+}
+
+void CPU::op_40(){
+  op_ld(&b, &b);
+  debug_instr.append("B, B");
+}
+
+void CPU::op_41(){
+  op_ld(&c, &b);
+  debug_instr.append("B, C");
+}
+
+void CPU::op_42(){
+  op_ld(&d, &b);
+  debug_instr.append("B, D");
+}
+
+void CPU::op_43(){
+  op_ld(&e, &b);
+  debug_instr.append("B, E");
+}
+
+void CPU::op_44(){
+  op_ld(&h, &b);
+  debug_instr.append("B, H");
+}
+
+void CPU::op_45(){
+  op_ld(&l, &b);
+  debug_instr.append("B, L");
+}
+
+void CPU::op_46(){
+  op_ld(hl->get(), &b);
+  debug_instr.append("B, (HL)");
+}
+
+void CPU::op_47(){
+  op_ld(&a, &b);
+  debug_instr.append("B, A");
+}
+
+void CPU::op_48(){
+  op_ld(&b, &c);
+  debug_instr.append("C, B");
+}
+
+void CPU::op_49(){
+  op_ld(&c, &c);
+  debug_instr.append("C, C");
+}
+
+void CPU::op_4A(){
+  op_ld(&d, &c);
+  debug_instr.append("C, D");
+}
+
+void CPU::op_4B(){
+  op_ld(&e, &c);
+  debug_instr.append("C, E");
+}
+
+void CPU::op_4C(){
+  op_ld(&h, &c);
+  debug_instr.append("C, H");
+}
+
+void CPU::op_4D(){
+  op_ld(&l, &c);
+  debug_instr.append("C, L");
+}
+
+void CPU::op_4E(){
+  op_ld(hl->get(), &c);
+  debug_instr.append("C, (HL)");
+}
+
+void CPU::op_4F(){
+  op_ld(&a, &c);
+  debug_instr.append("C, A");
+}
+
+void CPU::op_50(){
+  op_ld(&b, &d);
+  debug_instr.append("D, B");
+}
+
+void CPU::op_51(){
+  op_ld(&c, &d);
+  debug_instr.append("D, C");
+}
+
+void CPU::op_52(){
+  op_ld(&d, &d);
+  debug_instr.append("D, D");
+}
+
+void CPU::op_53(){
+  op_ld(&e, &d);
+  debug_instr.append("D, E");
+}
+
+void CPU::op_54(){
+  op_ld(&h, &d);
+  debug_instr.append("D, H");
+}
+
+void CPU::op_55(){
+  op_ld(&l, &d);
+  debug_instr.append("D, L");
+}
+
+void CPU::op_56(){
+  op_ld(hl->get(), &d);
+  debug_instr.append("D, (HL)");
+}
+
+void CPU::op_57(){
+  op_ld(&a, &d);
+  debug_instr.append("D, A");
+}
+
+void CPU::op_58(){
+  op_ld(&b, &e);
+  debug_instr.append("E, B");
+}
+
+void CPU::op_59(){
+  op_ld(&c, &e);
+  debug_instr.append("E, C");
+}
+
+void CPU::op_5A(){
+  op_ld(&d, &e);
+  debug_instr.append("E, D");
+}
+
+void CPU::op_5B(){
+  op_ld(&e, &e);
+  debug_instr.append("E, E");
+}
+
+void CPU::op_5C(){
+  op_ld(&h, &e);
+  debug_instr.append("E, H");
+}
+
+void CPU::op_5D(){
+  op_ld(&l, &e);
+  debug_instr.append("E, L");
+}
+
+void CPU::op_5E(){
+  op_ld(hl->get(), &e);
+  debug_instr.append("E, (HL)");
+}
+
+void CPU::op_5F(){
+  op_ld(&a, &e);
+  debug_instr.append("E, A");
+}
+
+void CPU::op_60(){
+  op_ld(&b, &h);
+  debug_instr.append("H, B");
+}
+
+void CPU::op_61(){
+  op_ld(&c, &h);
+  debug_instr.append("H, C");
+}
+
+void CPU::op_62(){
+  op_ld(&d, &h);
+  debug_instr.append("H, D");
+}
+
+void CPU::op_63(){
+  op_ld(&e, &h);
+  debug_instr.append("H, E");
+}
+
+void CPU::op_64(){
+  op_ld(&h, &h);
+  debug_instr.append("H, H");
+}
+
+void CPU::op_65(){
+  op_ld(&l, &h);
+  debug_instr.append("H, L");
+}
+
+void CPU::op_66(){
+  op_ld(hl->get(), &h);
+  debug_instr.append("H, (HL)");
+}
+
+void CPU::op_67(){
+  op_ld(&a, &h);
+  debug_instr.append("H, A");
+}
+
+void CPU::op_68(){
+  op_ld(&b, &l);
+  debug_instr.append("L, B");
+}
+
+void CPU::op_69(){
+  op_ld(&c, &l);
+  debug_instr.append("L, C");
+}
+
+void CPU::op_6A(){
+  op_ld(&d, &l);
+  debug_instr.append("L, D");
+}
+
+void CPU::op_6B(){
+  op_ld(&e, &l);
+  debug_instr.append("L, E");
+}
+
+void CPU::op_6C(){
+  op_ld(&h, &l);
+  debug_instr.append("L, H");
+}
+
+void CPU::op_6D(){
+  op_ld(&l, &l);
+  debug_instr.append("L, L");
+}
+
+void CPU::op_6E(){
+  op_ld(hl->get(), &l);
+  debug_instr.append("L, (HL)");
+}
+
+void CPU::op_6F(){
+  op_ld(&a, &l);
+  debug_instr.append("L, A");
+}
+
+void CPU::op_70(){
+  op_ld(&b, hl->get());
+  debug_instr.append("(HL), B");
+}
+
+void CPU::op_71(){
+  op_ld(&c, hl->get());
+  debug_instr.append("(HL), C");
+}
+
+void CPU::op_72(){
+  op_ld(&d, hl->get());
+  debug_instr.append("(HL), D");
+}
+
+void CPU::op_73(){
+  op_ld(&e, hl->get());
+  debug_instr.append("(HL), E");
+}
+
+void CPU::op_74(){
+  op_ld(&h, hl->get());
+  debug_instr.append("(HL), H");
+}
+
+void CPU::op_75(){
+  op_ld(&l, hl->get());
+  debug_instr.append("(HL), L");
+}
+
+void CPU::op_76(){
+  op_halt();
+}
+
+void CPU::op_77(){
+  op_ld(&a, hl->get());
+  debug_instr.append("(HL), A");
+}
+
+void CPU::op_78(){
+  op_ld(&b, &a);
+  debug_instr.append("A, B");
+}
+
+void CPU::op_79(){
+  op_ld(&c, &a);
+  debug_instr.append("A, C");
+}
+
+void CPU::op_7A(){
+  op_ld(&d, &a);
+  debug_instr.append("A, D");
+}
+
+void CPU::op_7B(){
+  op_ld(&e, &a);
+  debug_instr.append("A, E");
+}
+
+void CPU::op_7C(){
+  op_ld(&h, &a);
+  debug_instr.append("A, H");
+}
+
+void CPU::op_7D(){
+  op_ld(&l, &a);
+  debug_instr.append("A, L");
+}
+
+void CPU::op_7E(){
+  op_ld(hl->get(), &a);
+  debug_instr.append("A, (HL)");
+}
+
+void CPU::op_7F(){
+  op_ld(&a, &a);
+  debug_instr.append("A, A");
 }
 
 void CPU::op_80(){
@@ -1634,6 +2145,11 @@ void CPU::op_ccf(){
   debug_instr = "CCF ";
 }
 
+// TODO: implement these after adding timing/cycles
 void CPU::op_stop(){
     debug_instr = "STOP ";
+}
+
+void CPU::op_halt(){
+  debug_instr = "HALT ";
 }
