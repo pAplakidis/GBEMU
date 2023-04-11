@@ -10,7 +10,7 @@ CPU::CPU(uint8_t *memory_ptr, int m_size){
     reg_pc = 0x00;
     reg_sp = 0x00;
 
-    flag = 0x00;
+    flag = new FlagReg();
 
     this->memory_ptr = memory_ptr;
 
@@ -49,11 +49,11 @@ void CPU::cycle(){
     }
 
     // TODO: move to a debugger class
-    // for debugging
+    // debug
     if(brk == true){
-        // TODO: print flags and stack values as well
+        // TODO: print stack values as well
         printf("\nBREAKPOINT\n");
-        printf("Info Registers\n");
+        printf("Registers\n");
         printf("A: 0x%02x\n", a);
         printf("B: 0x%02x\n", b);
         printf("C: 0x%02x\n", c);
@@ -70,6 +70,12 @@ void CPU::cycle(){
         printf("DE: 0x%04x\n", de->get());
         printf("HL: 0x%04x\n", hl->get());
 
+        printf("Falgs\n");
+        printf("Z: %d", flag->flag_zero());
+        printf("N: %d", flag->flag_subtract());
+        printf("H: %d", flag->flag_half_carry());
+        printf("C: %d", flag->flag_carry());
+
         for(int i=0; i <= MEMSIZE - 16; i += 16){
             mem_dump.append(string_format("0x%05x:\t", i));
             for(int j=i; j < i+16; j++){
@@ -84,6 +90,10 @@ void CPU::cycle(){
     }
 }
 
+// TODO: this should return the number of cycles
+// which will reside in an array of 255 elements
+// example: return cycles[instr];
+// if opcode not supported return 0 or exit() (inside switch)
 void CPU::execute(uint8_t instr){
     switch(instr){
         case 0x00:
@@ -1855,6 +1865,28 @@ void CPU::op_CF(){
 
 }
 
+bool CPU::check_condition(Condition cond){
+  bool ret;
+
+  switch(cond){
+    case Condition::C:
+      ret = flag->flag_carry();
+      break;
+    case Condition::NC:
+      ret = !flag->flag_carry();
+      break;
+    case Condition::Z:
+      ret = flag->flag_zero();
+      break;
+    case Condition::NZ:
+      ret = !flag->flag_zero();
+      break;
+  }
+  
+  // TODO: need to notify whether the branch is taken for timing issues
+  // branch_taken = ret;
+  return ret;
+}
 
 // All instructions
 void CPU::op_nop(){
@@ -2046,8 +2078,11 @@ void CPU::op_jp(Regcomb *reg){
 }
 
 // Conditional jump to 16bit addr depending on condition from reg
-void CPU::op_jp(uint8_t *reg, uint16_t addr){
+void CPU::op_jp(Condition cond, uint16_t addr){
     debug_instr = "JP ";
+    if(check_condition(cond)){
+      reg_pc = addr - 1;
+    }
 }
 
 // Conditional jump to 16bit addr depending on condition from reg
