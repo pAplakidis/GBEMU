@@ -4,9 +4,9 @@
 #include <stdint.h>
 #include <vector>
 
-#include "utils.h"
 #include "cartridge.h"
 #include "cpu.h"
+#include "utils.h"
 
 class Gameboy{
 private:
@@ -21,7 +21,6 @@ public:
   Gameboy(std::string rom_path);
   ~Gameboy();
   void run();
-  // TODO: load rom into memory
   auto read_rom(std::string rom_path) -> std::vector<uint8_t>;
 
 };

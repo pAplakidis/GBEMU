@@ -1,5 +1,19 @@
 #include "cpu.h"
 
+/*
+template<typename ... Args>
+std::string string_format( const std::string& format, Args ... args )
+{
+  int size_s = std::snprintf( nullptr, 0, format.c_str(), args ... ) + 1; // Extra space for '\0'
+  if( size_s <= 0 ){ throw std::runtime_error( "Error during formatting." ); }
+  auto size = static_cast<size_t>( size_s );
+  std::unique_ptr<char[]> buf( new char[ size ] );
+  std::snprintf( buf.get(), size, format.c_str(), args ... );
+  return std::string( buf.get(), buf.get() + size - 1 ); // We don't want the '\0' inside
+}
+*/
+
+
 CPU::CPU(uint8_t *memory_ptr, int m_size){
     a, b, c, d, e, f, h, l = 0x00;
     af = new Regcomb(a, f);
@@ -13,8 +27,6 @@ CPU::CPU(uint8_t *memory_ptr, int m_size){
     flag = new FlagReg();
 
     this->memory_ptr = memory_ptr;
-
-    memdump_file.open("mem_dump.log");
 }
 
 CPU::~CPU(){
@@ -52,7 +64,7 @@ void CPU::cycle(){
     // debug
     if(brk == true){
         // TODO: print stack values as well
-        printf("\nBREAKPOINT\n");
+        printf("\n<====BREAKPOINT====>\n");
         printf("Registers\n");
         printf("A: 0x%02x\n", a);
         printf("B: 0x%02x\n", b);
@@ -70,11 +82,11 @@ void CPU::cycle(){
         printf("DE: 0x%04x\n", de->get());
         printf("HL: 0x%04x\n", hl->get());
 
-        printf("Falgs\n");
-        printf("Z: %d", flag->flag_zero());
-        printf("N: %d", flag->flag_subtract());
-        printf("H: %d", flag->flag_half_carry());
-        printf("C: %d", flag->flag_carry());
+        printf("\nFlags\n");
+        printf("Z: %d\n", flag->flag_zero());
+        printf("N: %d\n", flag->flag_subtract());
+        printf("H: %d\n", flag->flag_half_carry());
+        printf("C: %d\n", flag->flag_carry());
 
         for(int i=0; i <= MEMSIZE - 16; i += 16){
             mem_dump.append(string_format("0x%05x:\t", i));
@@ -83,10 +95,12 @@ void CPU::cycle(){
             }
             mem_dump.append("\n");
         }
+        memdump_file.open("mem_dump.log");
         memdump_file << mem_dump;
         memdump_file.close();
         printf("\nMemory Dumped at mem_dump.log\n");
-        exit(0);
+        //exit(0);
+        system("pause");
     }
 }
 
@@ -846,14 +860,12 @@ void CPU::op_07(){
   debug_instr.append("A");
 }
 
-// TODO: double check this
 void CPU::op_08(){
   uint16_t addr_lo = (uint16_t)load8(++reg_pc);
   uint16_t addr_hi = (uint16_t)(load8(++reg_pc)) << 8;
   uint16_t addr = addr_hi + addr_lo;
   op_ld(&reg_sp, addr);
   debug_instr.append(string_format("(Imm16:0x%04x), SP", addr));
-  //brk = true;
 }
 
 void CPU::op_09(){
@@ -938,7 +950,9 @@ void CPU::op_17(){
 }
 
 void CPU::op_18(){
-    //op_jr();
+  int16_t addr = load8(++reg_pc);
+  op_jr(addr);
+  debug_instr.append("Imm8:0x%02x", addr);
 }
 
 void CPU::op_19(){
@@ -979,7 +993,9 @@ void CPU::op_1F(){
 }
 
 void CPU::op_20(){
-  //op_jr();
+  int16_t addr = load8(++reg_pc);
+  op_jr(Condition::NZ, addr);
+  debug_instr.append("NZ, Imm8:0x%02x", addr);
 }
 
 void CPU::op_21(){
@@ -1022,7 +1038,9 @@ void CPU::op_27(){
 }
 
 void CPU::op_28(){
-    //op_jr();
+  int16_t addr = load8(++reg_pc);
+  op_jr(Condition::Z, addr);
+  debug_instr.append("Z, Imm8:0x%02x", addr);
 }
 
 void CPU::op_29(){
@@ -1062,7 +1080,9 @@ void CPU::op_2F(){
 }
 
 void CPU::op_30(){
-  //op_jr();
+  int16_t addr = load8(++reg_pc);
+  op_jr(Condition::NC, addr);
+  debug_instr.append("NC, Imm8:0x%02x", addr);
 }
 
 void CPU::op_31(){
@@ -1105,7 +1125,9 @@ void CPU::op_37(){
 }
 
 void CPU::op_38(){
-    //op_jr();
+  int16_t addr = load8(++reg_pc);
+  op_jr(Condition::C, addr);
+  debug_instr.append("C, Imm8:0x%02x", addr);
 }
 
 void CPU::op_39(){
@@ -1800,7 +1822,7 @@ void CPU::op_C2(){
   uint8_t addr_lo = load8(++reg_pc);
   uint8_t addr_hi = load8(++reg_pc);
   uint16_t addr = (uint16_t)(addr_hi << 8) + (uint16_t)addr_lo;
-  //op_jp(nz, addr);  // TODO: need to implement flags first
+  op_jp(Condition::NZ, addr);
   debug_instr.append(string_format("NZ, Imm16:0x%04x", addr));
 }
 
@@ -1810,7 +1832,6 @@ void CPU::op_C3(){
   uint16_t addr = (uint16_t)(addr_hi << 8) + (uint16_t)addr_lo;
   op_jp(addr);
   debug_instr.append(string_format("Imm16:0x%04x", addr));
-  brk = true;
 }
 
 void CPU::op_C4(){
@@ -1841,7 +1862,7 @@ void CPU::op_CA(){
   uint8_t addr_lo = load8(++reg_pc);
   uint8_t addr_hi = load8(++reg_pc);
   uint16_t addr = (uint16_t)(addr_hi << 8) + (uint16_t)addr_lo;
-  //op_jp(z, addr);
+  op_jp(Condition::Z, addr);
   debug_instr.append(string_format("Z, Imm16:0x%04x", addr));
 }
 
@@ -2067,33 +2088,34 @@ void CPU::op_cpl(){
 }
 
 void CPU::op_jp(uint16_t addr){
-    debug_instr = "JP ";
-    reg_pc = addr-1;  // we subtract 1 because in cycle reg pc is incremented before moving to the next one
+  debug_instr = "JP ";
+  reg_pc = addr-1;  // we subtract 1 because in cycle reg pc is incremented before moving to the next one
 }
 
 // Uncoditional jump to the absolute address specified by 16bit register (specifically HL)
 void CPU::op_jp(Regcomb *reg){
-    debug_instr = "JP ";
-    reg_pc = reg->get() - 1;  // we subtract 1 because in cycle reg pc is incremented before moving to the next one
+  debug_instr = "JP ";
+  reg_pc = reg->get() - 1;  // we subtract 1 because in cycle reg pc is incremented before moving to the next one
 }
 
 // Conditional jump to 16bit addr depending on condition from reg
 void CPU::op_jp(Condition cond, uint16_t addr){
-    debug_instr = "JP ";
-    if(check_condition(cond)){
-      reg_pc = addr - 1;
-    }
+  debug_instr = "JP ";
+  if(check_condition(cond)){
+    reg_pc = addr - 1;
+  }
 }
 
-// Conditional jump to 16bit addr depending on condition from reg
-void CPU::op_jp(uint16_t *reg, uint16_t addr){
-    debug_instr = "JP ";
+void CPU::op_jr(int8_t addr){
+  debug_instr = "JR ";
+  reg_pc += addr - 1;
 }
 
-void CPU::op_jr(){
-    debug_instr = "JR ";
-    // TODO
-
+void CPU::op_jr(Condition cond, int8_t addr){
+  debug_instr = "JR ";
+  if(check_condition(cond)){
+    reg_pc += addr - 1;
+  }
 }
 
 void CPU::op_rlc(uint8_t *reg){
