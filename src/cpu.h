@@ -333,6 +333,12 @@ public:
   void op_jp(Condition cond, uint16_t addr);
   void op_jr(int8_t addr);
   void op_jr(Condition cond, int8_t addr);
+  void op_call(uint16_t addr);
+  void op_call(Condition cond, uint16_t addr);
+  void op_ret();
+  void op_ret(Condition cond);
+  void op_reti();
+  void op_rst();
   void op_rlc(uint8_t *reg);
   void op_rlca();
   void op_rl(uint8_t *reg);

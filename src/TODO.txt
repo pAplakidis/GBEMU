@@ -2,9 +2,15 @@
 * fix identation (optional)
 * cartridge class
 * load/store operations (DONE)
+* flags (DONE)
+* jp, jr  (DONE)
+
+* pop, push
+* add flags to all ops that require them
+* add interrupts, handlers, etc
 * memory map
-* flags
-* jp, jr
+* add timing/cycles
+
 * background rendering
 * foreground rendering
 * support games

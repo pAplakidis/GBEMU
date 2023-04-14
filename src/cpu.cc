@@ -1811,7 +1811,8 @@ void CPU::op_BF(){
 }
 
 void CPU::op_C0(){
-
+  op_ret(Condition::NZ);
+  debug_instr.append("NZ");
 }
 
 void CPU::op_C1(){
@@ -1835,7 +1836,11 @@ void CPU::op_C3(){
 }
 
 void CPU::op_C4(){
-
+  uint8_t addr_lo = load8(++reg_pc);
+  uint8_t addr_hi = load8(++reg_pc);
+  uint16_t addr = (uint16_t)(addr_hi << 8) + (uint16_t)addr_lo;
+  op_jp(Condition::NZ, addr);
+  debug_instr.append(string_format("NZ, Imm16:0x%04x", addr));
 }
 
 void CPU::op_C5(){
@@ -1843,7 +1848,9 @@ void CPU::op_C5(){
 }
 
 void CPU::op_C6(){
-
+  uint8_t imm = load8(++reg_pc);
+  op_add(&a, &imm);
+  debug_instr.append(string_format("A, Imm8:0x%02x", imm));
 }
 
 void CPU::op_C7(){
@@ -1851,11 +1858,12 @@ void CPU::op_C7(){
 }
 
 void CPU::op_C8(){
-
+  op_ret(Condition::Z);
+  debug_instr.append(string_format("Z"));
 }
 
 void CPU::op_C9(){
-
+  op_ret();
 }
 
 void CPU::op_CA(){
@@ -1871,15 +1879,25 @@ void CPU::op_CB(){
 }
 
 void CPU::op_CC(){
-
+  uint8_t addr_lo = load8(++reg_pc);
+  uint8_t addr_hi = load8(++reg_pc);
+  uint16_t addr = (uint16_t)(addr_hi << 8) + (uint16_t)addr_lo;
+  op_jp(Condition::Z, addr);
+  debug_instr.append(string_format("Z, Imm16:0x%04x", addr));
 }
 
 void CPU::op_CD(){
-
+  uint8_t addr_lo = load8(++reg_pc);
+  uint8_t addr_hi = load8(++reg_pc);
+  uint16_t addr = (uint16_t)(addr_hi << 8) + (uint16_t)addr_lo;
+  op_call(addr);
+  debug_instr.append(string_format("Imm16:0x%04x", addr));
 }
 
 void CPU::op_CE(){
-
+  uint8_t imm = load8(++reg_pc);
+  op_adc(&imm);
+  debug_instr.append(string_format("A, Imm8:0x%02x", imm));
 }
 
 void CPU::op_CF(){
@@ -2040,7 +2058,7 @@ void CPU::op_dec(uint16_t addr){
 
 void CPU::op_adc(uint8_t *val){
     debug_instr = "ADC ";
-    uint8_t carry = f;
+    uint8_t carry = flag->flag_carry_val();
     a += *val + carry;
 
     // TODO: set flags such as carry, etc
@@ -2053,7 +2071,7 @@ void CPU::op_sub(uint8_t *reg, uint8_t *val){
 
 void CPU::op_sbc(uint8_t *val){
     debug_instr = "SBC ";
-    uint8_t carry = f;
+    uint8_t carry = flag->flag_carry_val();
     a -= *val - carry;
 }
 
@@ -2116,6 +2134,56 @@ void CPU::op_jr(Condition cond, int8_t addr){
   if(check_condition(cond)){
     reg_pc += addr - 1;
   }
+}
+
+void CPU::op_call(uint16_t addr){
+  debug_instr = "CALL";
+  reg_sp--;
+  mem_store8(reg_sp--, (uint8_t)(reg_pc & 0xff));
+  mem_store8(reg_sp, (uint8_t)(reg_pc >> 8));
+  reg_pc = addr - 1;
+}
+
+void CPU::op_call(Condition cond, uint16_t addr){
+  debug_instr = "CALL ";
+  if(check_condition(cond)){
+    reg_sp--;
+    mem_store8(reg_sp--, (uint8_t)(reg_pc & 0xff));
+    mem_store8(reg_sp, (uint8_t)(reg_pc >> 8));
+    reg_pc = addr - 1;
+  }
+}
+
+void CPU::op_ret(){
+  debug_instr = "RET ";
+  uint8_t pc_hi = load8(reg_sp++);
+  uint8_t pc_lo = load8(reg_sp++);
+  reg_pc = (uint16_t)(pc_hi << 8) + (uint16_t)pc_lo;
+  reg_pc--; // pc-1 since we increment it at the end of cycle(), which we do not want
+}
+
+void CPU::op_ret(Condition cond){
+  debug_instr = "RET ";
+  if(check_condition(cond)){
+    uint8_t pc_hi = load8(reg_sp++);
+    uint8_t pc_lo = load8(reg_sp++);
+    reg_pc = (uint16_t)(pc_hi << 8) + (uint16_t)pc_lo;
+    reg_pc--; // pc-1 since we increment it at the end of cycle(), which we do not want
+  }
+}
+
+void CPU::op_reti(){
+  debug_instr = "RETI ";
+  uint8_t pc_hi = load8(reg_sp++);
+  uint8_t pc_lo = load8(reg_sp++);
+  reg_pc = (uint16_t)(pc_hi << 8) + (uint16_t)pc_lo;
+  reg_pc--; // pc-1 since we increment it at the end of cycle(), which we do not want
+  // IME = 1
+}
+
+void CPU::op_rst(){
+  debug_instr = "RST ";
+
 }
 
 void CPU::op_rlc(uint8_t *reg){

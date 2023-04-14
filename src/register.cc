@@ -78,17 +78,17 @@ bool FlagReg::flag_carry(){
 }
 
 uint8_t FlagReg::flag_zero_val(){
-
+  return (uint8_t)(flag_zero() ? 1: 0);
 }
 
 uint8_t FlagReg::flag_subtract_val(){
-
+  return (uint8_t)(flag_subtract() ? 1: 0);
 }
 
 uint8_t FlagReg::flag_half_carry_val(){
-
+  return (uint8_t)(flag_half_carry() ? 1: 0);
 }
 
 uint8_t FlagReg::flag_carry_val(){
-
+  return (uint8_t)(flag_carry() ? 1: 0);
 }
