@@ -5,7 +5,7 @@
 * flags (DONE)
 * jp, jr  (DONE)
 
-* pop, push
+* pop, push (DONE)
 * add flags to all ops that require them
 * add interrupts, handlers, etc
 * memory map

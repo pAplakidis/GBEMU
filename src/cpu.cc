@@ -815,6 +815,41 @@ uint16_t CPU::load16(uint16_t addr){
     return mem_load16(addr);
 }
 
+uint8_t CPU::rst_addr(uint8_t opcode){
+  uint8_t ret;
+
+  switch(opcode){
+    case 0xc7:
+      ret = 0x00;
+    case 0xcf:
+      ret = 0x08;
+      break;
+    case 0xd7:
+      ret = 0x10;
+      break;
+    case 0xdf:
+      ret = 0x18;
+      break;
+    case 0xe7:
+      ret = 0x20;
+      break;
+    case 0xef:
+      ret = 0x28;
+      break;
+    case 0xf7:
+      ret = 0x30;
+      break;
+    case 0xff:
+      ret = 0x38;
+      break;
+    default:
+      ret = 0x00;
+      break;
+  }
+
+  return ret;
+}
+
 // All opcodes
 void CPU::op_00(){
     op_nop();
@@ -1816,7 +1851,8 @@ void CPU::op_C0(){
 }
 
 void CPU::op_C1(){
-
+  op_pop(bc);
+  debug_instr.append("BC");
 }
 
 void CPU::op_C2(){
@@ -1844,7 +1880,8 @@ void CPU::op_C4(){
 }
 
 void CPU::op_C5(){
-
+  op_push(bc);
+  debug_instr.append("BC");
 }
 
 void CPU::op_C6(){
@@ -1854,7 +1891,8 @@ void CPU::op_C6(){
 }
 
 void CPU::op_C7(){
-
+  op_rst(0xc7);
+  debug_instr.append("00h");
 }
 
 void CPU::op_C8(){
@@ -1875,7 +1913,8 @@ void CPU::op_CA(){
 }
 
 void CPU::op_CB(){
-
+  // op_prefix()
+  // TODO
 }
 
 void CPU::op_CC(){
@@ -1901,7 +1940,8 @@ void CPU::op_CE(){
 }
 
 void CPU::op_CF(){
-
+  op_rst(0xcf);
+  debug_instr.append("08h");
 }
 
 bool CPU::check_condition(Condition cond){
@@ -2181,9 +2221,12 @@ void CPU::op_reti(){
   // IME = 1
 }
 
-void CPU::op_rst(){
+void CPU::op_rst(uint8_t opcode){
   debug_instr = "RST ";
-
+  reg_sp--;
+  mem_store8(reg_sp--, (uint8_t)(reg_pc & 0xff));
+  mem_store8(reg_sp, (uint8_t)(reg_pc >> 8));
+  reg_pc = rst_addr(opcode) - 1;
 }
 
 void CPU::op_rlc(uint8_t *reg){
@@ -2277,4 +2320,17 @@ void CPU::op_stop(){
 
 void CPU::op_halt(){
   debug_instr = "HALT ";
+}
+
+void CPU::op_push(Regcomb *reg){
+  debug_instr = "PUSH ";
+  reg_sp--;
+  mem_store8(reg_sp--, reg->get_lo());
+  mem_store8(reg_sp--, reg->get_hi());
+}
+
+void CPU::op_pop(Regcomb *reg){
+  debug_instr = "POP ";
+  uint16_t val = (uint16_t)(mem_load8(reg_sp++) << 8) + (uint16_t)(mem_load8(reg_sp++));
+  reg->set(val);
 }

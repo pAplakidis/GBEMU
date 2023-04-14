@@ -7,20 +7,22 @@ Regcomb::Regcomb(uint8_t hi, uint8_t lo){
   val = (uint16_t) (hi << 8) + (uint16_t)lo;
 }
 
-uint8_t Regcomb::get_hi(){
+uint16_t Regcomb::get(){
+    return val;
+}
 
+uint8_t Regcomb::get_hi(){
+  return hi;
 }
 
 uint8_t Regcomb::get_lo(){
-
+  return lo;
 }
 
 void Regcomb::set(uint16_t new_val){
-    val = new_val;
-}
-
-uint16_t Regcomb::get(){
-    return val;
+  val = new_val;
+  hi = (uint8_t)(val >> 8);
+  lo = (uint8_t)(val & 0xff);
 }
 
 void Regcomb::increment(){

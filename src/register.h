@@ -15,8 +15,8 @@ public:
 
   uint8_t get_hi();
   uint8_t get_lo();
-  void set(uint16_t new_val);
   uint16_t get();
+  void set(uint16_t new_val);
   void increment();
   void decrement();
 };

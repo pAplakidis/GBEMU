@@ -70,6 +70,8 @@ public:
   uint8_t load8(uint16_t addr);
   uint16_t load16(uint16_t addr);
 
+  uint8_t rst_addr(uint8_t opcode);
+
   // all opcodes
   void op_00();
   void op_01();
@@ -338,7 +340,7 @@ public:
   void op_ret();
   void op_ret(Condition cond);
   void op_reti();
-  void op_rst();
+  void op_rst(uint8_t opcode);
   void op_rlc(uint8_t *reg);
   void op_rlca();
   void op_rl(uint8_t *reg);
@@ -352,4 +354,6 @@ public:
   void op_ccf();
   void op_stop();
   void op_halt();
+  void op_push(Regcomb *reg);
+  void op_pop(Regcomb *reg);
 };
