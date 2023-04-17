@@ -345,6 +345,7 @@ public:
   void op_add(uint8_t *reg, uint8_t *val);
   void op_add(Regcomb *a, Regcomb *b);
   void op_add(Regcomb *a, uint16_t *b);
+  void op_add(uint16_t *a, int8_t *b);
   void op_inc(uint8_t *reg);
   void op_inc(uint16_t *reg);
   void op_inc(Regcomb *reg);

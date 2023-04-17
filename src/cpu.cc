@@ -2179,15 +2179,20 @@ void CPU::op_DF(){
 }
 
 void CPU::op_E0(){
-
+  uint16_t addr = 0xff00 + (uint16_t)load8(++reg_pc);
+  op_ld(&a, addr);
+  debug_instr.append(string_format("(0xFF00+Imm8:0x%02x), A", addr));
 }
 
 void CPU::op_E1(){
-
+  op_pop(hl);
+  debug_instr.append("HL");
 }
 
 void CPU::op_E2(){
-
+  uint16_t addr = 0xff00 + (uint16_t)c;
+  op_ld(&a, addr);
+  debug_instr.append(string_format("(0xFF00+C:0x%02x), A", addr));
 }
 
 void CPU::op_E3(){
@@ -2199,27 +2204,38 @@ void CPU::op_E4(){
 }
 
 void CPU::op_E5(){
-
+  op_push(hl);
+  debug_instr.append("HL");
 }
 
 void CPU::op_E6(){
-
+  uint8_t addr = load8(++reg_pc);
+  op_and(&addr);
+  debug_instr.append(string_format("A, Imm8:0x%02x", addr));
 }
 
 void CPU::op_E7(){
-
+  op_rst(0xe7);
+  debug_instr.append("20h");
 }
 
 void CPU::op_E8(){
-
+  int8_t val = (int8_t)load8(++reg_pc);
+  op_add(&reg_sp, &val);
+  debug_instr.append(string_format("SP, Imm8:0x%02x", val));
 }
 
 void CPU::op_E9(){
-
+  op_jp(hl);
+  debug_instr.append("HL");
 }
 
 void CPU::op_EA(){
-
+  uint8_t addr_lo = load8(++reg_pc);
+  uint8_t addr_hi = load8(++reg_pc);
+  uint16_t addr = (uint16_t)(addr_hi << 8) + (uint16_t)addr_lo;
+  op_ld(&a, addr);
+  debug_instr.append(string_format("(Imm16:0x%04x), A", addr));
 }
 
 void CPU::op_EB(){
@@ -2235,11 +2251,14 @@ void CPU::op_ED(){
 }
 
 void CPU::op_EE(){
-
+  uint8_t val = load8(++reg_pc);
+  op_xor(&val);
+  debug_instr.append(string_format("A, Imm8:0x%02x", val));
 }
 
 void CPU::op_EF(){
-
+  op_rst(0xef);
+  debug_instr.append("28h");
 }
 
 void CPU::op_F0(){
@@ -2411,6 +2430,14 @@ void CPU::op_add(Regcomb *a, Regcomb *b){
 void CPU::op_add(Regcomb *a, uint16_t *b){
   debug_instr = "ADD ";
   a->set(a->get() + *b);
+
+  // TODO: set flags such as carry, etc
+}
+
+// used for adding to SP
+void CPU::op_add(uint16_t *a, int8_t *b){
+  debug_instr = "ADD ";
+  *a = *a + (int16_t)(*b);
 
   // TODO: set flags such as carry, etc
 }
