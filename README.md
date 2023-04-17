@@ -7,7 +7,7 @@ mkdir build
 cd build
 cmake ..
 make
-./GBEMU <paht to .gb file>
+./GBEMU <path to .gb file>
 ```
 
 ## TODO
