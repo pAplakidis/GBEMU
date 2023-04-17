@@ -2262,19 +2262,24 @@ void CPU::op_EF(){
 }
 
 void CPU::op_F0(){
-
+  uint16_t addr = 0xff00 + (uint16_t)load8(++reg_pc);
+  op_ld(addr, &a);
+  debug_instr.append(string_format("A, (0xFF00+Imm8:0x%02x)", addr));
 }
 
 void CPU::op_F1(){
-
+  op_pop(af);
+  debug_instr.append("AF");
 }
 
 void CPU::op_F2(){
-
+  uint16_t addr = 0xff00 + (uint16_t)c;
+  op_ld(addr, &a);
+  debug_instr.append(string_format("A, (0xFF00+C:0x%02x)", addr));
 }
 
 void CPU::op_F3(){
-
+  // op_di();
 }
 
 void CPU::op_F4(){
@@ -2282,31 +2287,43 @@ void CPU::op_F4(){
 }
 
 void CPU::op_F5(){
-
+  op_push(af);
+  debug_instr.append("AF");
 }
 
 void CPU::op_F6(){
-
+  uint8_t val = load8(++reg_pc);
+  op_or(&val);
+  debug_instr.append(string_format("A, Imm8:0x%02x", val));
 }
 
 void CPU::op_F7(){
-
+  op_rst(0xf7);
+  debug_instr.append("30h");
 }
 
 void CPU::op_F8(){
-
+  int8_t val = (int8_t)load8(++reg_pc);
+  //op_ld(reg_sp+val, hl);
+  hl->set(reg_sp+val);
+  debug_instr.append(string_format("LD HL, SP+Imm8:0x%02x", val));
 }
 
 void CPU::op_F9(){
-
+  reg_sp = hl->get();
+  debug_instr.append("LD SP, HL");
 }
 
 void CPU::op_FA(){
-
+  uint16_t addr_lo = (uint16_t)load8(++reg_pc);
+  uint16_t addr_hi = (uint16_t)(load8(++reg_pc)) << 8;
+  uint16_t addr = addr_hi + addr_lo;
+  op_ld(addr, &a);
+  debug_instr.append(string_format("A, (Imm16):0x%04x", addr));
 }
 
 void CPU::op_FB(){
-
+  // op_ei();
 }
 
 void CPU::op_FC(){
@@ -2318,11 +2335,14 @@ void CPU::op_FD(){
 }
 
 void CPU::op_FE(){
-
+  uint8_t val = load8(++reg_pc);
+  op_cp(&val);
+  debug_instr.append(string_format("A, Imm8:0x%02x", val));
 }
 
 void CPU::op_FF(){
-
+  op_rst(0xff);
+  debug_instr.append("38h");
 }
 
 
@@ -2723,4 +2743,8 @@ void CPU::op_pop(Regcomb *reg){
   debug_instr = "POP ";
   uint16_t val = (uint16_t)(mem_load8(reg_sp++) << 8) + (uint16_t)(mem_load8(reg_sp++));
   reg->set(val);
+}
+
+void CPU::op_prefix(){
+
 }

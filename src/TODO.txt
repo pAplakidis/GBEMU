@@ -10,6 +10,7 @@
 * add interrupts, handlers, etc
 * memory map
 * add timing/cycles
+* find BOOT-ROM
 
 * background rendering
 * foreground rendering
@@ -22,5 +23,8 @@ Components:
 - Audio Processing Unit
 - 8KB RAM
 - 8KB VRAM
-h
+
+IMPORTANT NOTE:
+if you're running the boot rom then you start at $0, but to directly boot a ROM you should set the initial PC to $100
+prefixed opcodes are fairly simple too, the game boy only uses one prefix ($CB), so if you encounter $CB when fetching an opcode, you fetch the next byte and decode/execute that byte according to the CB-prefixed opcode table (as opposed to the regular opcode table)
 

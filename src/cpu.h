@@ -388,4 +388,5 @@ public:
   void op_halt();
   void op_push(Regcomb *reg);
   void op_pop(Regcomb *reg);
+  void op_prefix();
 };
