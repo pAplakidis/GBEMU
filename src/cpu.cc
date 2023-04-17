@@ -731,6 +731,150 @@ void CPU::execute(uint8_t instr){
         case 0xCF:
             op_CF();
             break;
+        case 0xD0:
+            op_D0();
+            break;
+        case 0xD1:
+            op_D1();
+            break;
+        case 0xD2:
+            op_D2();
+            break;
+        case 0xD3:
+            op_D3();
+            break;
+        case 0xD4:
+            op_D4();
+            break;
+        case 0xD5:
+            op_D5();
+            break;
+        case 0xD6:
+            op_D6();
+            break;
+        case 0xD7:
+            op_D7();
+            break;
+        case 0xD8:
+            op_D8();
+            break;
+        case 0xD9:
+            op_D9();
+            break;
+        case 0xDA:
+            op_DA();
+            break;
+        case 0xDB:
+            op_DB();
+            break;
+        case 0xDC:
+            op_DC();
+            break;
+        case 0xDD:
+            op_DD();
+            break;
+        case 0xDE:
+            op_DE();
+            break;
+        case 0xDF:
+            op_DF();
+            break;
+        case 0xE0:
+            op_E0();
+            break;
+        case 0xE1:
+            op_E1();
+            break;
+        case 0xE2:
+            op_E2();
+            break;
+        case 0xE3:
+            op_E3();
+            break;
+        case 0xE4:
+            op_E4();
+            break;
+        case 0xE5:
+            op_E5();
+            break;
+        case 0xE6:
+            op_E6();
+            break;
+        case 0xE7:
+            op_E7();
+            break;
+        case 0xE8:
+            op_E8();
+            break;
+        case 0xE9:
+            op_E9();
+            break;
+        case 0xEA:
+            op_EA();
+            break;
+        case 0xEB:
+            op_EB();
+            break;
+        case 0xEC:
+            op_EC();
+            break;
+        case 0xED:
+            op_ED();
+            break;
+        case 0xEE:
+            op_EE();
+            break;
+        case 0xEF:
+            op_EF();
+            break;
+        case 0xF0:
+            op_F0();
+            break;
+        case 0xF1:
+            op_F1();
+            break;
+        case 0xF2:
+            op_F2();
+            break;
+        case 0xF3:
+            op_F3();
+            break;
+        case 0xF4:
+            op_F4();
+            break;
+        case 0xF5:
+            op_F5();
+            break;
+        case 0xF6:
+            op_F6();
+            break;
+        case 0xF7:
+            op_F7();
+            break;
+        case 0xF8:
+            op_F8();
+            break;
+        case 0xF9:
+            op_F9();
+            break;
+        case 0xFA:
+            op_FA();
+            break;
+        case 0xFB:
+            op_FB();
+            break;
+        case 0xFC:
+            op_FC();
+            break;
+        case 0xFD:
+            op_FD();
+            break;
+        case 0xFE:
+            op_FE();
+            break;
+        case 0xFF:
+            op_FF();
+            break;
         default:
             printf("Opcode not supported\n");
             break;
@@ -1897,7 +2041,7 @@ void CPU::op_C7(){
 
 void CPU::op_C8(){
   op_ret(Condition::Z);
-  debug_instr.append(string_format("Z"));
+  debug_instr.append("Z");
 }
 
 void CPU::op_C9(){
@@ -1943,6 +2087,225 @@ void CPU::op_CF(){
   op_rst(0xcf);
   debug_instr.append("08h");
 }
+
+void CPU::op_D0(){
+  op_ret(Condition::NC);
+  debug_instr.append("NC");
+}
+
+void CPU::op_D1(){
+  op_pop(de);
+  debug_instr.append("DE");
+}
+
+void CPU::op_D2(){
+  uint8_t addr_lo = load8(++reg_pc);
+  uint8_t addr_hi = load8(++reg_pc);
+  uint16_t addr = (uint16_t)(addr_hi << 8) + (uint16_t)addr_lo;
+  op_jp(Condition::NC, addr);
+  debug_instr.append(string_format("NC, Imm16:0x%04x", addr));
+}
+
+void CPU::op_D3(){
+
+}
+
+void CPU::op_D4(){
+  uint8_t addr_lo = load8(++reg_pc);
+  uint8_t addr_hi = load8(++reg_pc);
+  uint16_t addr = (uint16_t)(addr_hi << 8) + (uint16_t)addr_lo;
+  op_jp(Condition::NC, addr);
+  debug_instr.append(string_format("NC, Imm16:0x%04x", addr));
+}
+
+void CPU::op_D5(){
+  op_push(de);
+  debug_instr.append("DE");
+}
+
+void CPU::op_D6(){
+  uint8_t imm = load8(++reg_pc);
+  op_sub(&a, &imm);
+  debug_instr.append(string_format("A, Imm8:0x%02x", imm));
+}
+
+void CPU::op_D7(){
+  op_rst(0xd7);
+  debug_instr.append("10h");
+}
+
+void CPU::op_D8(){
+  op_ret(Condition::C);
+  debug_instr.append("C");
+}
+
+void CPU::op_D9(){
+  op_reti();
+}
+
+void CPU::op_DA(){
+  uint8_t addr_lo = load8(++reg_pc);
+  uint8_t addr_hi = load8(++reg_pc);
+  uint16_t addr = (uint16_t)(addr_hi << 8) + (uint16_t)addr_lo;
+  op_jp(Condition::C, addr);
+  debug_instr.append(string_format("C, Imm16:0x%04x", addr));
+}
+
+void CPU::op_DB(){
+
+}
+
+void CPU::op_DC(){
+  uint8_t addr_lo = load8(++reg_pc);
+  uint8_t addr_hi = load8(++reg_pc);
+  uint16_t addr = (uint16_t)(addr_hi << 8) + (uint16_t)addr_lo;
+  op_jp(Condition::C, addr);
+  debug_instr.append(string_format("C, Imm16:0x%04x", addr));
+}
+
+void CPU::op_DD(){
+
+}
+
+void CPU::op_DE(){
+  uint8_t imm = load8(++reg_pc);
+  op_sbc(&imm);
+  debug_instr.append(string_format("A, Imm8:0x%02x", imm));
+}
+
+void CPU::op_DF(){
+  op_rst(0xdf);
+  debug_instr.append("18h");
+}
+
+void CPU::op_E0(){
+
+}
+
+void CPU::op_E1(){
+
+}
+
+void CPU::op_E2(){
+
+}
+
+void CPU::op_E3(){
+
+}
+
+void CPU::op_E4(){
+
+}
+
+void CPU::op_E5(){
+
+}
+
+void CPU::op_E6(){
+
+}
+
+void CPU::op_E7(){
+
+}
+
+void CPU::op_E8(){
+
+}
+
+void CPU::op_E9(){
+
+}
+
+void CPU::op_EA(){
+
+}
+
+void CPU::op_EB(){
+
+}
+
+void CPU::op_EC(){
+
+}
+
+void CPU::op_ED(){
+
+}
+
+void CPU::op_EE(){
+
+}
+
+void CPU::op_EF(){
+
+}
+
+void CPU::op_F0(){
+
+}
+
+void CPU::op_F1(){
+
+}
+
+void CPU::op_F2(){
+
+}
+
+void CPU::op_F3(){
+
+}
+
+void CPU::op_F4(){
+
+}
+
+void CPU::op_F5(){
+
+}
+
+void CPU::op_F6(){
+
+}
+
+void CPU::op_F7(){
+
+}
+
+void CPU::op_F8(){
+
+}
+
+void CPU::op_F9(){
+
+}
+
+void CPU::op_FA(){
+
+}
+
+void CPU::op_FB(){
+
+}
+
+void CPU::op_FC(){
+
+}
+
+void CPU::op_FD(){
+
+}
+
+void CPU::op_FE(){
+
+}
+
+void CPU::op_FF(){
+
+}
+
 
 bool CPU::check_condition(Condition cond){
   bool ret;
