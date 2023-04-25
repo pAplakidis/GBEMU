@@ -99,8 +99,9 @@ void CPU::cycle(){
         memdump_file << mem_dump;
         memdump_file.close();
         printf("\nMemory Dumped at mem_dump.log\n");
-        //exit(0);
-        system("pause");
+        exit(0);
+        //printf("\n$>");
+        //std::cin.get();
     }
 }
 
@@ -2435,46 +2436,150 @@ void CPU::op_ld(uint16_t *src_reg, uint16_t addr){
 
 void CPU::op_add(uint8_t *reg, uint8_t *val){
   debug_instr = "ADD ";
-  *reg = *reg + *val;
+  uint8_t res = *reg + *val;
 
-  // TODO: set flags such as carry, etc
+  if(*reg == 0)
+    flag->set_flag_zero(true);
+  else
+    flag->set_flag_zero(false);
+
+  flag->set_flag_subtract(false);
+  
+  if((*reg & 0xf) + (*val & 0xf) > 0xf)
+    flag->set_flag_zero(true);
+  else
+    flag->set_flag_zero(false);
+  
+  if((res & 0x100) != 0)
+    flag->set_flag_zero(true);
+  else
+    flag->set_flag_zero(false);
+
+  *reg = res;
 }
 
 void CPU::op_add(Regcomb *a, Regcomb *b){
   debug_instr = "ADD ";
-  a->set(a->get() + b->get());
+  uint8_t res = a->get() + b->get();
 
-  // TODO: set flags such as carry, etc
+  if(a->get() == 0)
+    flag->set_flag_zero(true);
+  else
+    flag->set_flag_zero(false);
+
+  flag->set_flag_subtract(false);
+  
+  if((a->get() & 0xf) + (b->get() & 0xf) > 0xf)
+    flag->set_flag_zero(true);
+  else
+    flag->set_flag_zero(false);
+  
+  if((res & 0x100) != 0)
+    flag->set_flag_zero(true);
+  else
+    flag->set_flag_zero(false);
+
+  a->set(res);
 }
 
 void CPU::op_add(Regcomb *a, uint16_t *b){
   debug_instr = "ADD ";
-  a->set(a->get() + *b);
+  uint8_t res = a->get() + *b;
 
-  // TODO: set flags such as carry, etc
+  if(a->get() == 0)
+    flag->set_flag_zero(true);
+  else
+    flag->set_flag_zero(false);
+
+  flag->set_flag_subtract(false);
+  
+  if((a->get() & 0xf) + (*b & 0xf) > 0xf)
+    flag->set_flag_zero(true);
+  else
+    flag->set_flag_zero(false);
+  
+  if((res & 0x100) != 0)
+    flag->set_flag_zero(true);
+  else
+    flag->set_flag_zero(false);
+
+  a->set(res);
 }
 
 // used for adding to SP
 void CPU::op_add(uint16_t *a, int8_t *b){
   debug_instr = "ADD ";
-  *a = *a + (int16_t)(*b);
+  uint8_t res = *a + (int16_t)(*b);
 
-  // TODO: set flags such as carry, etc
+  if(*a == 0)
+    flag->set_flag_zero(true);
+  else
+    flag->set_flag_zero(false);
+
+  flag->set_flag_subtract(false);
+  
+  if((*a & 0xf) + (*b & 0xf) > 0xf)
+    flag->set_flag_zero(true);
+  else
+    flag->set_flag_zero(false);
+  
+  if((res & 0x100) != 0)
+    flag->set_flag_zero(true);
+  else
+    flag->set_flag_zero(false);
+
+  *a = res;
 }
 
 void CPU::op_inc(uint8_t *reg){
-    debug_instr = "INC ";
-    *reg++;
+  debug_instr = "INC ";
+  *reg++;
+
+  if(*reg == 0)
+    flag->set_flag_zero(true);
+  else
+    flag->set_flag_zero(false);
+
+  flag->set_flag_subtract(false);
+
+  if((*reg & 0x0f) == 0x00)
+    flag->set_flag_half_carry(true);
+  else
+    flag->set_flag_half_carry(true);
 }
 
 void CPU::op_inc(uint16_t *reg){
-    debug_instr = "INC ";
-    *reg++;
+  debug_instr = "INC ";
+  *reg++;
+
+  if(*reg == 0)
+    flag->set_flag_zero(true);
+  else
+    flag->set_flag_zero(false);
+
+  flag->set_flag_subtract(false);
+
+  if((*reg & 0x0f) == 0x00)
+    flag->set_flag_half_carry(true);
+  else
+    flag->set_flag_half_carry(true);
 }
 
 void CPU::op_inc(Regcomb *reg){
-    debug_instr = "INC ";
-    reg->increment();
+  debug_instr = "INC ";
+  reg->increment();
+
+  if(reg->get() == 0)
+    flag->set_flag_zero(true);
+  else
+    flag->set_flag_zero(false);
+
+  flag->set_flag_subtract(false);
+
+  if((reg->get() & 0x0f) == 0x00)
+    flag->set_flag_half_carry(true);
+  else
+    flag->set_flag_half_carry(true);
 }
 
 void CPU::op_inc(uint16_t addr){
@@ -2482,21 +2587,63 @@ void CPU::op_inc(uint16_t addr){
   uint8_t val = load8(addr);
   val++;
   store8(addr, val);
+
+  if(val == 0)
+    flag->set_flag_zero(true);
+  else
+    flag->set_flag_zero(false);
+
+  flag->set_flag_subtract(false);
+
+  if((val & 0x0f) == 0x00)
+    flag->set_flag_half_carry(true);
+  else
+    flag->set_flag_half_carry(true);
 }
 
 void CPU::op_dec(uint8_t *reg){
-    debug_instr = "DEC ";
-    *reg--;
+  debug_instr = "DEC ";
+  *reg--;
+
+  if(*reg == 0)
+    flag->set_flag_zero(true);
+  else
+    flag->set_flag_zero(false);
+
+  flag->set_flag_subtract(true);
+
+  if((*reg & 0x0f) == 0x0f)
+    flag->set_flag_half_carry(true);
 }
 
 void CPU::op_dec(uint16_t *reg){
-    debug_instr = "DEC ";
-    *reg--;
+  debug_instr = "DEC ";
+  *reg--;
+
+  if(*reg == 0)
+    flag->set_flag_zero(true);
+  else
+    flag->set_flag_zero(false);
+
+  flag->set_flag_subtract(true);
+
+  if((*reg & 0x0f) == 0x0f)
+    flag->set_flag_half_carry(true);
 }
 
 void CPU::op_dec(Regcomb *reg){
-    debug_instr = "DEC ";
-    reg->decrement();
+  debug_instr = "DEC ";
+  reg->decrement();
+
+  if(reg->get() == 0)
+    flag->set_flag_zero(true);
+  else
+    flag->set_flag_zero(false);
+
+  flag->set_flag_subtract(true);
+
+  if((reg->get() & 0x0f) == 0x0f)
+    flag->set_flag_half_carry(true);
 }
 
 void CPU::op_dec(uint16_t addr){
@@ -2504,30 +2651,66 @@ void CPU::op_dec(uint16_t addr){
   uint8_t val = load8(addr);
   val--;
   store8(addr, val);
+
+  if(val == 0)
+    flag->set_flag_zero(true);
+  else
+    flag->set_flag_zero(false);
+
+  flag->set_flag_subtract(true);
+
+  if((val & 0x0f) == 0x0f)
+    flag->set_flag_half_carry(true);
 }
 
 void CPU::op_adc(uint8_t *val){
     debug_instr = "ADC ";
     uint8_t carry = flag->flag_carry_val();
-    a += *val + carry;
+    uint full_res = a + *val + carry;
+    uint8_t res =  *val + carry;
 
-    // TODO: set flags such as carry, etc
+    flag->set_flag_zero(res == 0);
+    flag->set_flag_subtract(false);
+    flag->set_flag_half_carry(((a & 0xf) + (*val & 0xf) + carry) > 0xf);
+    flag->set_flag_carry(full_res > 0xff);
+
+    a += res;
 }
 
 void CPU::op_sub(uint8_t *reg, uint8_t *val){
     debug_instr = "SUB ";
-    *reg = *reg - *val;
+    uint8_t res = *reg - *val;
+
+    flag->set_flag_zero(*reg == 0);
+    flag->set_flag_subtract(true);
+    flag->set_flag_half_carry(((*reg & 0xf) - (*val & 0xf)) < 0);
+    flag->set_flag_carry(*reg < *val);
+
+    *reg = res;
 }
 
 void CPU::op_sbc(uint8_t *val){
     debug_instr = "SBC ";
     uint8_t carry = flag->flag_carry_val();
-    a -= *val - carry;
+    uint8_t res = *val - carry;
+    int full_res = a - *val - carry;
+
+    flag->set_flag_zero(res == 0);
+    flag->set_flag_subtract(true);
+    flag->set_flag_carry(full_res < 0);
+    flag->set_flag_half_carry(((a & 0xf) - (*val & 0xf) - carry) < 0);
+
+    a -= res;
 }
 
 void CPU::op_and(uint8_t *val){
     debug_instr = "AND ";
     a &= *val;
+
+    flag->set_flag_zero(a == 0);
+    flag->set_flag_half_carry(true);
+    flag->set_flag_carry(false);
+    flag->set_flag_subtract(false);
 }
 
 void CPU::op_xor(uint8_t *val){
