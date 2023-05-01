@@ -6,10 +6,10 @@
 * jp, jr  (DONE)
 
 * pop, push (DONE)
-* add flags to all ops that require them
+* add flags to all ops that require them  (DONE)
 * add interrupts, handlers, etc
-* memory map
 * add timing/cycles
+* memory map
 * find BOOT-ROM
 
 * background rendering

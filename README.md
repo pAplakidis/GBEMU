@@ -13,10 +13,10 @@ make
 ## TODO
 - Implement Full Memory Map
 - Implement Load and Store Instructions (DONE)
-- Implement Flags
-- Implement Jump Instructions
-- Implement Graphics
+- Implement Flags (DONE)
+- Implement Jump Instructions (DONE)
 - Implement Timing/Cycles
+- Implement Graphics
 - Improve Debugging => Separate Debugger
 - Test on games
 
