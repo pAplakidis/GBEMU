@@ -64,7 +64,7 @@ public:
 
   void main_loop();
   void cycle();
-  void execute(uint8_t instr);
+  uint execute(uint8_t instr);
   void store8(uint16_t addr, uint8_t data);
   void store16(uint16_t addr, uint16_t data);
   uint8_t load8(uint16_t addr);
