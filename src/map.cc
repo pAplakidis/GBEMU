@@ -3,8 +3,8 @@
 namespace map{
 
 Range::Range(uint16_t start, uint16_t end){
-    this->start = start;
-    this->end = end;
+  this->start = start;
+  this->end = end;
 }
 
 // Returns an offset if the address is within range

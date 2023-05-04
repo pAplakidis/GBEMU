@@ -15,7 +15,8 @@ make
 - Implement Load and Store Instructions (DONE)
 - Implement Flags (DONE)
 - Implement Jump Instructions (DONE)
-- Implement Timing/Cycles
+- Implement Timing/Cycles (DONE)
+- Implement Interrupts/Exceptions and handlers  (DONE, dummy exceptions tho)
 - Implement Graphics
 - Improve Debugging => Separate Debugger
 - Test on games

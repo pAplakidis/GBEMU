@@ -36,8 +36,6 @@ CPU::~CPU(){
 void CPU::main_loop(){
     while(1){
         cycle();
-
-        //break;  // TODO: temporary for debugging
     }
 }
 
@@ -105,12 +103,9 @@ void CPU::cycle(){
     }
 }
 
-// TODO: this should return the number of cycles
-// which will reside in an array of 255 elements
-// example: return cycles[instr];
-// if opcode not supported return 0 or exit() (inside switch)
 uint CPU::execute(uint8_t instr){
   uint cycles = 0;
+  branch_taken = false;
 
   switch(instr){
       case 0x00:
@@ -883,6 +878,12 @@ uint CPU::execute(uint8_t instr){
           break;
   }
 
+  if(!branch_taken)
+    cycles = opcode_cycles[instr];
+  else
+    cycles = opcode_cycles_branched[instr];
+
+  debug_instr.append(string_format("\t\tcycles: %d", cycles));
   return cycles;
 }
 
@@ -2369,8 +2370,7 @@ bool CPU::check_condition(Condition cond){
       break;
   }
   
-  // TODO: need to notify whether the branch is taken for timing issues
-  // branch_taken = ret;
+  branch_taken = ret;
   return ret;
 }
 
@@ -2954,11 +2954,13 @@ void CPU::op_ccf(){
 
 // TODO: implement these after adding timing/cycles
 void CPU::op_stop(){
-    debug_instr = "STOP ";
+  debug_instr = "STOP ";
+  //halted = true;
 }
 
 void CPU::op_halt(){
   debug_instr = "HALT ";
+  halted = true;
 }
 
 void CPU::op_push(Regcomb *reg){

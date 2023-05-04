@@ -22,6 +22,10 @@ private:
   bool brk = false;
   std::ofstream memdump_file;
 
+  bool interrupts_on = false;
+  bool halted = false;
+  bool branch_taken = false;
+
   // for branching
   enum class Condition {
       NZ,
