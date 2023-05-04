@@ -3,6 +3,7 @@
 Gameboy::Gameboy(std::string rom_path){
     auto rom_data = read_rom(rom_path);
 
+    // TODO: place the ROM at the correct address range according to the memory map
     // print ROM contents and copy them to main memory
     int idx = 0;
     for(uint8_t i: rom_data){
