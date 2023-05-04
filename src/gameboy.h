@@ -16,6 +16,7 @@ private:
 
   Cartridge *ctrg;
   CPU *cpu;
+  MMU *mmu;
 
 public:
   Gameboy(std::string rom_path);

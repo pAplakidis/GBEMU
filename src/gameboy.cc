@@ -17,7 +17,7 @@ Gameboy::Gameboy(std::string rom_path){
 
     // init components
     ctrg = new Cartridge(rom_data);
-    cpu = new CPU(memory, MEM_SIZE);
+    cpu = new CPU(memory, MEM_SIZE, mmu);
 }
 
 Gameboy::~Gameboy(){

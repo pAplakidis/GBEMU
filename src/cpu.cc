@@ -14,7 +14,7 @@ std::string string_format( const std::string& format, Args ... args )
 */
 
 
-CPU::CPU(uint8_t *memory_ptr, int m_size){
+CPU::CPU(uint8_t *memory_ptr, int m_size, MMU *mmu){
     a, b, c, d, e, f, h, l = 0x00;
     af = new Regcomb(a, f);
     bc = new Regcomb(b, c);
@@ -27,6 +27,7 @@ CPU::CPU(uint8_t *memory_ptr, int m_size){
     flag = new FlagReg();
 
     this->memory_ptr = memory_ptr;
+    this->mmu = mmu;
 }
 
 CPU::~CPU(){
@@ -920,24 +921,20 @@ void CPU::mem_store16(uint16_t offset, uint16_t data){
 void CPU::store8(uint16_t addr, uint8_t data){
     // TODO: check if addr is aligned
 
-    // TODO: we are currently using just one big junk of memory, but later it needs to utilize the memory map
-    //if(uint16_t *offset = map::ROM_bank0->contains(addr)){
-    //
-    //}
-    // TODO: this is temporary since memory map is not finished
-
+    if(!mmu->check_range(addr)){
+      printf("Attempting to write to invalid memory 0x%x. EXITING ...\n", addr);
+      exit(0);
+    }
     mem_store8(addr, data);
 }
 
 void CPU::store16(uint16_t addr, uint16_t data){
     // TODO: check if addr is aligned
 
-    // TODO: we are currently using just one big junk of memory, but later it needs to utilize the memory map
-    //if(uint16_t *offset = map::ROM_bank0->contains(addr)){
-    //
-    //}
-    // TODO: this is temporary since memory map is not finished
-
+    if(!mmu->check_range(addr)){
+      printf("Attempting to write to invalid memory 0x%x. EXITING ...\n", addr);
+      exit(0);
+    }
     mem_store16(addr, data);
 }
 
@@ -945,11 +942,10 @@ uint8_t CPU::load8(uint16_t addr){
 
     // TODO: check if addr is aligned
 
-    // TODO: we are currently using just one big junk of memory, but later it needs to utilize the memory map
-    //if(uint16_t *offset = map::ROM_bank0->contains(addr)){
-    //
-    //}
-
+    if(!mmu->check_range(addr)){
+      printf("Attempting to read from invalid memory 0x%x. EXITING ...\n", addr);
+      exit(0);
+    }
     return mem_load8(addr);
 }
 
@@ -957,11 +953,10 @@ uint16_t CPU::load16(uint16_t addr){
 
     // TODO: check if addr is aligned
 
-    // TODO: we are currently using just one big junk of memory, but later it needs to utilize the memory map
-    //if(uint16_t *offset = map::ROM_bank0->contains(addr)){
-    //
-    //}
-
+    if(!mmu->check_range(addr)){
+      printf("Attempting to read from invalid memory 0x%x. EXITING ...\n", addr);
+      exit(0);
+    }
     return mem_load16(addr);
 }
 

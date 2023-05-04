@@ -10,6 +10,7 @@
 #include "register.h"
 #include "instruction.h"
 #include "map.h"
+#include "mmu.h"
 #include "utils.h"
 
 #define MEMSIZE 1024*1024
@@ -56,9 +57,10 @@ private:
   FlagReg *flag;
 
   uint8_t *memory_ptr;
+  MMU *mmu;
 
 public:
-  CPU(uint8_t *memory_ptr, int m_size);
+  CPU(uint8_t *memory_ptr, int m_size, MMU *mmu);
   ~CPU();
 
   uint8_t mem_load8(uint16_t offset);

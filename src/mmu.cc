@@ -67,3 +67,49 @@ auto MMU::read(const uint16_t addr) const -> uint8_t {
 void MMU::write(const uint8_t addr, uint8_t data){
 
 }
+
+bool MMU::check_range(uint16_t addr){
+
+  if(uint16_t *offset = map::ROM->contains(addr)){
+    return true;
+  }
+
+  if(uint16_t *offset = map::VRAM->contains(addr)){
+    return true;
+  }
+
+  if(uint16_t *offset = map::EXT_RAM->contains(addr)){
+    return true;
+  }
+
+  if(uint16_t *offset = map::WRAM->contains(addr)){
+    return true;
+  }
+
+  if(uint16_t *offset = map::ECHO_RAM->contains(addr)){
+    return true;
+  }
+
+  if(uint16_t *offset = map::OAM->contains(addr)){
+    return true;
+  }
+
+  if(uint16_t *offset = map::UNUSABLE->contains(addr)){
+    printf("Attempting to access unusable memory 0x%x\n", addr);
+    return true;
+  }
+
+  if(uint16_t *offset = map::IO_Regs->contains(addr)){
+    return true;
+  }
+
+  if(uint16_t *offset = map::HRAM->contains(addr)){
+    return true;
+  }
+
+  if(uint16_t *offset = map::IE->contains(addr)){
+    return true;
+  }
+
+  return false;
+}
