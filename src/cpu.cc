@@ -107,6 +107,7 @@ void CPU::cycle(){
 uint CPU::execute(uint8_t instr){
   uint cycles = 0;
   branch_taken = false;
+  prefixed_op = false;
 
   switch(instr){
       case 0x00:
@@ -879,10 +880,15 @@ uint CPU::execute(uint8_t instr){
           break;
   }
 
-  if(!branch_taken)
-    cycles = opcode_cycles[instr];
-  else
+  if(!branch_taken){
+    if(prefixed_op){
+      cycles = opcode_cycles_cb[instr];
+    }else{
+      cycles = opcode_cycles[instr];
+    }
+  }else{
     cycles = opcode_cycles_branched[instr];
+  }
 
   debug_instr.append(string_format("\t\tcycles: %d", cycles));
   return cycles;
@@ -2058,7 +2064,6 @@ void CPU::op_CA(){
 }
 
 void CPU::op_CB(){
-  // TODO
   op_prefix();
 }
 
@@ -2973,5 +2978,10 @@ void CPU::op_pop(Regcomb *reg){
 
 // TODO: implement prefixed opcodes
 void CPU::op_prefix(){
+  prefixed_op = true;
+  uint8_t prefix_opcode = load8(++reg_pc);
 
+  switch(prefix_opcode){
+
+  }
 }

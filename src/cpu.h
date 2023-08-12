@@ -25,6 +25,7 @@ private:
 
   bool interrupts_on = false;
   bool halted = false;
+  bool prefixed_op = false;
   bool branch_taken = false;
 
   // for branching

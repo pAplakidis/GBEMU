@@ -43,6 +43,7 @@ const std::array<uint8_t, 256> opcode_cycles_branched = {
   3, 3, 2, 1, 0, 4, 2, 4, 3, 2, 4, 1, 0, 0, 2, 4
 };
 
+// prefixed opcodes
 const std::array<uint8_t, 256> opcode_cycles_cb = {
   2, 2, 2, 2, 2, 2, 4, 2, 2, 2, 2, 2, 2, 2, 4, 2,
   2, 2, 2, 2, 2, 2, 4, 2, 2, 2, 2, 2, 2, 2, 4, 2,
