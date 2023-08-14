@@ -1,6 +1,7 @@
 #include "gameboy.h"
 
 Gameboy::Gameboy(std::string rom_path){
+    int32_t sdl_context = SDL_Init(SDL_INIT_VIDEO);
     auto rom_data = read_rom(rom_path);
 
     // TODO: place the ROM at the correct address range according to the memory map
@@ -19,6 +20,7 @@ Gameboy::Gameboy(std::string rom_path){
     // init components
     ctrg = new Cartridge(rom_data);
     cpu = new CPU(memory, MEM_SIZE, mmu);
+    renderer = new Renderer(sdl_context);
 }
 
 Gameboy::~Gameboy(){
