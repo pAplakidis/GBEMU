@@ -1,6 +1,12 @@
 # GBEMU
 A Gameboy Emulator implemented in C++
 
+### Requirements
+- cmake
+- make
+- OpenGL
+- SDL2
+
 ## USAGE
 ```
 mkdir build
